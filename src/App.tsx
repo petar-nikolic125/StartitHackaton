@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { Layout } from './layout/Layout';
 import { ProgressBar } from './components/ui/ProgressBar';
 
@@ -10,7 +10,7 @@ const Creators = lazy(() => import('./pages/Creators'));
 
 export function App() {
   return (
-    <BrowserRouter>
+    <>
       <ProgressBar />
       <Layout>
         <Suspense fallback={<div className="p-8">Loading...</div>}>
@@ -22,6 +22,6 @@ export function App() {
           </Routes>
         </Suspense>
       </Layout>
-    </BrowserRouter>
+    </>
   );
 }

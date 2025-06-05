@@ -1,14 +1,9 @@
 module.exports = {
-  preset: 'ts-jest/presets/default-esm',
+  preset: 'ts-jest',
   testEnvironment: 'jsdom',
-  extensionsToTreatAsEsm: ['.ts', '.tsx'],
+  roots: ['<rootDir>/src'],
   moduleNameMapper: {
     '\\.(css|jpg|png|svg)$': 'identity-obj-proxy'
   },
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
-  globals: {
-    'ts-jest': {
-      useESM: true
-    }
-  }
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts']
 };
