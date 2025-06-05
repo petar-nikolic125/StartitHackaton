@@ -3,44 +3,25 @@ import type { FC } from "react";
 import { PhoneMockup } from "./PhoneMockup";
 import { LiveCounter } from "./LiveCounter";
 import { VideoModal } from "./VideoModal";
-import { SeenOn } from "./SeenOn";
 import { StickyCTA } from "./StickyCTA";
-import { VouchSection } from "./VouchSection";
-import { Bars3Icon } from "@heroicons/react/24/solid";
 
 const Hero: FC = () => (
-    <div className="bg-page-gradient bg-fixed text-white min-h-screen relative">
-        {/* ─── HERO SECTION ─────────────────────────────────────────────────────── */}
-        <section className="hero-section h-screen w-screen overflow-hidden">
-            {/* HEADER */}
-            <header className="absolute inset-x-0 top-0 px-4 md:px-16 py-6 flex justify-between items-center z-30">
-                <h1 className="hero-nav__logo">GramCourses</h1>
-                <nav className="hidden md:block">
-                    <ul className="hero-nav__list">
-                        {["Features", "Pricing", "Creators"].map((item) => (
-                            <li key={item} className="hero-nav__item">
-                                {item}
-                            </li>
-                        ))}
-                    </ul>
-                </nav>
-                <button className="md:hidden hero-nav__menu-btn" aria-label="Menu">
-                    <Bars3Icon className="w-6 h-6" />
-                </button>
-            </header>
+  <div className="bg-page-gradient bg-fixed text-white min-h-screen relative">
+    {/* ─── HERO SECTION ─────────────────────────────────────────────────────── */}
+    <section className="hero-section h-screen w-screen overflow-hidden pt-24">
+      {/* MAIN CONTENT */}
+      <div className="hero-container px-4 md:px-16 flex flex-col md:flex-row items-center justify-between space-y-8 md:space-y-0 relative z-20">
+        {/* ← LEFT COLUMN → */}
+        <div className="hero-content w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left space-y-6">
+          <h2 className="hero-headline">
+            Open your <br className="hidden md:block" />
+            course store in 4 minutes—<br />
+            no code.
+          </h2>
 
-            {/* MAIN CONTENT */}
-            <div className="hero-container px-4 md:px-16 flex flex-col md:flex-row items-center justify-between space-y-8 md:space-y-0 relative z-20">
-                {/* ← LEFT COLUMN → */}
-                <div className="hero-content w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left space-y-6">
-                    <h2 className="hero-headline">
-                        Open your <br className="hidden md:block" />
-                        course store in 4 minutes—<br />
-                        no code.
-                    </h2>
-
-                    {/* Live Counter */}
-                    <LiveCounter className="
+          {/* Live Counter */}
+          <LiveCounter
+            className="
             mt-2
             inline-block
             bg-white/10
@@ -52,21 +33,18 @@ const Hero: FC = () => (
             backdrop-blur-sm
             hover:bg-white/20
             transition
-          " />
+          "
+          />
 
-                    {/* Seen On Logos */}
-                    <div className="mt-4 opacity-80 hover:opacity-100 transition-opacity">
-                        <SeenOn />
-                    </div>
+          {/* Primary CTA */}
+          <button className="hero-cta mt-6 focus:ring-4 focus:ring-accent1/50">
+            Start Free Store
+          </button>
 
-                    {/* Primary CTA */}
-                    <button className="hero-cta mt-6 focus:ring-4 focus:ring-accent1/50">
-                        Start Free Store
-                    </button>
-
-                    {/* Video Modal Trigger */}
-                    <div className="mt-4">
-                        <VideoModal className="
+          {/* Video Modal Trigger */}
+          <div className="mt-4">
+            <VideoModal
+              className="
               inline-flex items-center space-x-2
               bg-white/10 hover:bg-white/20
               px-4 py-2 rounded-full
@@ -74,30 +52,32 @@ const Hero: FC = () => (
               shadow-md
               transition
               focus:outline-none focus:ring-4 focus:ring-white/30
-            " />
-                    </div>
+            "
+            />
+          </div>
 
-                    {/* Rating */}
-                    <p className="hero-rating mt-4">
-                        Rated <span className="text-white font-semibold">★ 4.9/5</span> by{" "}
-                        2,134 creators
-                    </p>
+          {/* Rating */}
+          <p className="hero-rating mt-4">
+            Rated <span className="text-white font-semibold">★ 4.9/5</span>{" "}
+            by 2,134 creators
+          </p>
 
-                    {/* Footer */}
-                    <footer className="hero-footer mt-2 flex items-center space-x-2">
-                        <span className="hero-footer__link">@coachmike</span>
-                        <span>→ $3,482 today</span>
-                    </footer>
-                </div>
+          {/* Footer */}
+          <footer className="hero-footer mt-2 flex items-center space-x-2">
+            <span className="hero-footer__link">@coachmike</span>
+            <span>→ $3,482 today</span>
+          </footer>
+        </div>
 
-                {/* ← RIGHT COLUMN → */}
-                <div className="hero-right w-full md:w-1/2 flex justify-center">
-                    <PhoneMockup />
-                </div>
-            </div>
+        {/* ← RIGHT COLUMN → */}
+        <div className="hero-right w-full md:w-1/2 flex justify-center">
+          <PhoneMockup />
+        </div>
+      </div>
 
-            {/* Sticky CTA pill (appears on scroll) */}
-            <StickyCTA className="
+      {/* Sticky CTA pill (appears on scroll) */}
+      <StickyCTA
+        className="
         hidden lg:flex
         fixed bottom-8 right-8
         bg-gradient-to-r from-accent1 to-accent2
@@ -106,12 +86,10 @@ const Hero: FC = () => (
         shadow-2xl
         hover:shadow-[0_0_20px_rgba(255,90,200,0.8)]
         transition
-      " />
-        </section>
-
-        {/* ─── VOUCH / TRUST SECTION ──────────────────────────────────────────────── */}
-        <VouchSection />
-    </div>
+      "
+      />
+    </section>
+  </div>
 );
 
 export default Hero;
