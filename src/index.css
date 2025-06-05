@@ -2,139 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── GLOBAL BASE ─────────────────────────────────────────────────────────── */
-@layer base {
-    html, body {
-        @apply h-full m-0 p-0 antialiased;
-    }
-    /* single, seamless gradient */
-    html {
-        @apply bg-[page-gradient] bg-fixed text-white;
-    }
+body {
+  @apply bg-dark2 text-gray-100;
 }
 
-/* ─── COMPONENTS: HERO, PHONE & VOUCH ─────────────────────────────────────── */
-@layer components {
-    /* floating glow */
-    @keyframes floatSlow {
-        0%, 100% { transform: translateY(0); }
-        50%      { transform: translateY(-12px); }
-    }
-    .animate-float-slow {
-        animation: floatSlow 6s ease-in-out infinite;
-    }
+.nav-link {
+  @apply text-gray-200 hover:text-white focus:text-white transition relative px-2 py-1;
+}
+.nav-link.active {
+  @apply text-white font-semibold border-gradient;
+}
 
-    /* Hero */
-    .hero-section {
-        @apply relative flex items-center justify-center
-        h-screen w-screen overflow-hidden;
-    }
-    .hero-section::before {
-        content: '';
-        @apply absolute inset-0 bg-hero-glow blur-[220px]
-        opacity-80 pointer-events-none animate-float-slow;
-    }
-    .hero-container {
-        @apply relative z-10 flex items-center justify-between
-        w-full max-w-7xl mx-auto;
-    }
-
-    /* Nav */
-    .hero-nav__logo {
-        @apply text-4xl md:text-5xl font-extrabold
-        text-transparent bg-clip-text
-        bg-gradient-to-r from-accent1 to-accent2;
-    }
-    .hero-nav__list {
-        @apply flex space-x-10;
-    }
-    .hero-nav__item {
-        @apply text-xl tracking-wider font-semibold
-        text-white/90 hover:text-violet-300
-        transition-colors cursor-pointer;
-    }
-    .hero-nav__menu-btn {
-        @apply text-white focus:outline-none;
-    }
-
-    /* Content */
-    .hero-content {
-        @apply flex flex-col space-y-8
-        items-center md:items-start
-        text-center md:text-left;
-    }
-    .hero-headline {
-        @apply text-6xl sm:text-7xl md:text-8xl lg:text-[5rem]
-        font-extrabold leading-tight tracking-tight;
-    }
-    .hero-subtext {
-        @apply text-white/70 text-lg md:text-xl;
-    }
-    .hero-cta {
-        @apply inline-block bg-gradient-to-r from-accent1 to-accent2
-        text-white font-bold text-xl md:text-2xl
-        px-8 md:px-12 py-4 md:py-5 rounded-2xl
-        shadow-[0_0_40px_rgba(255,90,200,0.6)]
-        hover:shadow-[0_0_80px_rgba(255,90,200,0.8)]
-        transition-shadow duration-300
-        focus:outline-none focus:ring-4 focus:ring-accent1/50;
-    }
-    .hero-rating {
-        @apply text-gray-300 text-sm md:text-base;
-    }
-    .hero-footer {
-        @apply flex items-center space-x-4 text-sm md:text-base
-        text-white/70;
-    }
-    .hero-footer__link {
-        @apply text-indigo-400 hover:underline;
-    }
-
-    /* Phone */
-    .hero-right {
-        @apply relative flex items-center justify-center;
-    }
-    .phone-glow {
-        @apply absolute -z-10 w-[500px] h-[500px]
-        bg-hero-glow blur-[220px] opacity-80
-        rounded-full animate-float-slow;
-        top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-    }
-    .phone-mockup {
-        @apply relative w-[280px] h-[560px]
-        sm:w-[320px] sm:h-[640px]
-        bg-black/90 border-4 border-gray-900
-        rounded-[2.5rem] overflow-hidden
-        p-4 sm:p-6 flex flex-col items-center gap-y-4
-        shadow-[0_20px_80px_rgba(0,0,0,0.7)]
-        transition-transform duration-500
-        group-hover:scale-[1.04];
-    }
-    .phone-mockup__notch {
-        @apply absolute top-2 left-1/2 -translate-x-1/2
-        w-[60px] h-[6px] bg-gray-800/70 rounded-full;
-    }
-    .phone-mockup__button {
-        @apply rounded-2xl font-semibold text-white
-        px-4 md:px-8 py-2 md:py-4 backdrop-blur-md
-        shadow-md transition-shadow duration-300;
-    }
-    .phone-mockup__button--swipe {
-        @apply bg-gradient-to-r from-accent1 to-accent2;
-    }
-    .phone-mockup__button--pay {
-        @apply flex items-center justify-center space-x-2
-        bg-gradient-to-r from-blue-500 to-blue-700;
-    }
-    .phone-mockup__video {
-        @apply relative w-full flex-1
-        bg-gray-800 rounded-2xl overflow-hidden;
-    }
-    .phone-mockup__video img {
-        @apply w-full h-full object-cover;
-    }
-
-    /* Vouch & Cards inherit gradient */
-    /* Cards styled in CreatorCard */
+.border-gradient {
+  @apply border-b-2 border-transparent bg-gradient-to-r from-primary via-secondary to-accent bg-[length:100%_2px] bg-no-repeat bg-bottom;
 }

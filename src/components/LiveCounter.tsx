@@ -1,31 +1,13 @@
-// src/components/LiveCounter.tsx
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-export interface LiveCounterProps {
-  className?: string;
-}
-
-export const LiveCounter: FC<LiveCounterProps> = ({ className }) => {
-  const [count, setCount] = useState(0);
-
+export function LiveCounter({ className = '' }: { className?: string }) {
+  const [count, setCount] = useState(100000);
   useEffect(() => {
-    // fake live increment
-    const target = 124_932;
-    let current = 0;
-    const step = Math.ceil(target / 100);
-    const iv = setInterval(() => {
-      current = Math.min(current + step, target);
-      setCount(current);
-      if (current >= target) clearInterval(iv);
-    }, 50);
-    return () => clearInterval(iv);
+    const id = setInterval(() => setCount((c) => c + 50), 1000);
+    return () => clearInterval(id);
   }, []);
-
+  const formatted = count.toLocaleString();
   return (
-      <div className={className}>
-      <span className="text-lg md:text-xl font-medium">
-        💸 ${count.toLocaleString()} earned by creators this month
-      </span>
-      </div>
+    <span className={`text-gray-200 ${className}`}>${formatted} earned by creators</span>
   );
-};
+}
