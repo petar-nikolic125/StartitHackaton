@@ -6,6 +6,7 @@ import { VideoModal } from "./VideoModal";
 import { SeenOn } from "./SeenOn";
 import { StickyCTA } from "./StickyCTA";
 import { VouchSection } from "./VouchSection";
+import { Bars3Icon } from "@heroicons/react/24/solid";
 
 const Hero: FC = () => (
     <div className="bg-page-gradient bg-fixed text-white min-h-screen relative">
@@ -14,7 +15,7 @@ const Hero: FC = () => (
             {/* HEADER */}
             <header className="absolute inset-x-0 top-0 px-4 md:px-16 py-6 flex justify-between items-center z-30">
                 <h1 className="hero-nav__logo">GramCourses</h1>
-                <nav>
+                <nav className="hidden md:block">
                     <ul className="hero-nav__list">
                         {["Features", "Pricing", "Creators"].map((item) => (
                             <li key={item} className="hero-nav__item">
@@ -23,6 +24,9 @@ const Hero: FC = () => (
                         ))}
                     </ul>
                 </nav>
+                <button className="md:hidden hero-nav__menu-btn" aria-label="Menu">
+                    <Bars3Icon className="w-6 h-6" />
+                </button>
             </header>
 
             {/* MAIN CONTENT */}
