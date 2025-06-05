@@ -71,6 +71,7 @@ export const PhoneMockup: FC = () => (
                     <img
                         src={RobertImg}
                         alt="Placeholder"
+                        loading="lazy"
                         className="w-full h-full object-cover filter blur-lg brightness-50"
                     />
                     <button className="absolute inset-0 flex items-center justify-center text-white opacity-70 hover:opacity-100 transition-opacity">

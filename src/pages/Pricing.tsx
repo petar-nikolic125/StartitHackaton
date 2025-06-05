@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { motion } from "framer-motion";
+import { Button } from "../components/ui/Button";
 
 interface Tier {
   name: string;
@@ -110,15 +111,14 @@ export const Pricing: FC = () => {
               ))}
             </ul>
 
-            <button
-              className={`mt-8 w-full rounded-2xl px-6 py-3 font-medium text-white transition ${
-                tier.highlight
-                  ? "bg-gradient-to-r from-[#FF3CAC] via-[#784BA0] to-[#2B86C5] hover:opacity-90"
-                  : "bg-[#2B86C5] hover:bg-[#2470A0]"
-              }`}
+            <Button
+              size="md"
+              className="mt-8 w-full"
+              variant={tier.highlight ? "gradient" : "solid"}
+              aria-label={tier.highlight ? "Get started with Pro" : "Choose plan"}
             >
               {tier.highlight ? "Get Started" : "Choose Plan"}
-            </button>
+            </Button>
           </motion.div>
         ))}
       </motion.div>

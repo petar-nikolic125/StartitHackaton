@@ -12,6 +12,9 @@ module.exports = {
                 accent1: "#D93EFF",
                 accent2: "#FF894C",
                 brandPurple: "#8A3FFC",
+                primary: "#FF3CAC",
+                secondary: "#784BA0",
+                accent: "#2B86C5",
             },
             backgroundImage: {
                 // unified, continuous page gradient

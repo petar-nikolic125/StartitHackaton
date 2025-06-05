@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 export const Navbar: FC = () => {
   const linkBase =
-    "px-4 py-2 text-sm font-medium transition-colors duration-200";
+    "px-6 py-2 text-base font-medium transition-colors duration-200";
   const linkInactive = "text-white/70 hover:text-white";
   const linkActive =
     "text-white border-b-2 border-gradient-to-r from-[#FF3CAC] via-[#784BA0] to-[#2B86C5]";
@@ -13,6 +13,7 @@ export const Navbar: FC = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-12 h-16">
         <NavLink
           to="/"
+          aria-label="GramCourses home"
           className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#FF3CAC] via-[#784BA0] to-[#2B86C5]"
         >
           GramCourses
@@ -21,6 +22,7 @@ export const Navbar: FC = () => {
           <NavLink
             to="/"
             end
+            aria-label="Home"
             className={({ isActive }) =>
               `${linkBase} ${isActive ? linkActive : linkInactive}`
             }
@@ -29,6 +31,7 @@ export const Navbar: FC = () => {
           </NavLink>
           <NavLink
             to="/features"
+            aria-label="Features"
             className={({ isActive }) =>
               `${linkBase} ${isActive ? linkActive : linkInactive}`
             }
@@ -37,6 +40,7 @@ export const Navbar: FC = () => {
           </NavLink>
           <NavLink
             to="/pricing"
+            aria-label="Pricing"
             className={({ isActive }) =>
               `${linkBase} ${isActive ? linkActive : linkInactive}`
             }
@@ -45,6 +49,7 @@ export const Navbar: FC = () => {
           </NavLink>
           <NavLink
             to="/creators"
+            aria-label="Creators"
             className={({ isActive }) =>
               `${linkBase} ${isActive ? linkActive : linkInactive}`
             }

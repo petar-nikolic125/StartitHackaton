@@ -4,9 +4,10 @@ import { PhoneMockup } from "./PhoneMockup";
 import { LiveCounter } from "./LiveCounter";
 import { VideoModal } from "./VideoModal";
 import { StickyCTA } from "./StickyCTA";
+import { Button } from "./ui/Button";
 
 const Hero: FC = () => (
-  <div className="bg-page-gradient bg-fixed text-white min-h-screen relative">
+  <div className="bg-gradient-to-b from-[#2B0030] via-[#3F0045] to-[#0F0D1A] bg-fixed text-white min-h-screen relative">
     {/* ─── HERO SECTION ─────────────────────────────────────────────────────── */}
     <section className="hero-section h-screen w-screen overflow-hidden pt-24">
       {/* MAIN CONTENT */}
@@ -15,7 +16,7 @@ const Hero: FC = () => (
         <div className="hero-content w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left space-y-6">
           <h2 className="hero-headline">
             Open your <br className="hidden md:block" />
-            course store in 4 minutes—<br />
+            course store in <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent">4 minutes</span>—<br />
             no code.
           </h2>
 
@@ -37,9 +38,13 @@ const Hero: FC = () => (
           />
 
           {/* Primary CTA */}
-          <button className="hero-cta mt-6 focus:ring-4 focus:ring-accent1/50">
+          <Button
+            className="hero-cta mt-6"
+            size="lg"
+            aria-label="Start your free GramCourses store now in under 4 minutes"
+          >
             Start Free Store
-          </button>
+          </Button>
 
           {/* Video Modal Trigger */}
           <div className="mt-4">
