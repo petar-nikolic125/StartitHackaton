@@ -18,13 +18,12 @@ export default function SocialProof() {
               </span>
             )}
             <div className="flex items-center space-x-4">
-              <img
-                src={c.avatar}
-                alt="avatar"
-                className="w-16 h-16 rounded-full object-cover ring-2 ring-primary"
-                onError={(e) => ((e.currentTarget.src = '/vite.svg'))}
-                loading="lazy"
-              />
+              <div className="w-16 h-16 rounded-full ring-2 ring-primary bg-gradient-to-br from-primary via-secondary to-accent grid place-items-center text-white font-bold text-xl">
+                {c.name
+                  .split(' ')
+                  .map((n) => n[0])
+                  .join('')}
+              </div>
               <div>
                 <p className="font-semibold">{c.name}</p>
                 <p className="text-sm text-gray-400">@{c.handle}</p>

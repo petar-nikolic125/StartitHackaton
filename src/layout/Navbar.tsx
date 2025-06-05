@@ -16,9 +16,9 @@ export function Navbar() {
 
   return (
     <header className="fixed top-0 left-0 w-full bg-dark1 z-50 shadow-md">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 h-16">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 h-20">
         <Link to="/" className="text-2xl font-bold text-white">GramCourses</Link>
-        <nav className="hidden md:flex space-x-6">
+        <nav className="hidden md:flex flex-1 justify-center space-x-6">
           <NavLink
             to="/"
             onClick={() => handleNavClick('hero')}
@@ -54,7 +54,7 @@ export function Navbar() {
           className="hidden md:block"
           onClick={() => document.getElementById('wizard')?.classList.remove('hidden')}
         >
-          ⚡ Launch in 4 min
+          Launch in 4 min
         </Button>
         <button
           className="md:hidden p-2 text-white"
@@ -103,7 +103,7 @@ export function Navbar() {
               setOpen(false);
             }}
           >
-            ⚡ Launch in 4 min
+            Launch in 4 min
           </Button>
         </div>
       )}

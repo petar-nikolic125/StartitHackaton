@@ -9,17 +9,17 @@ export const tiers: Tier[] = [
   {
     name: 'Basic',
     price: '$9/mo',
-    features: ['Unlimited courses', 'gram.link/you'],
+    features: ['Unlimited courses', 'Vanity URL'],
   },
   {
     name: 'Pro',
-    price: '$29/mo',
-    features: ['Everything in Basic', 'Analytics', 'Priority support'],
+    price: '$39/mo',
+    features: ['Analytics', 'Email capture', 'Priority support'],
     highlight: true,
   },
   {
     name: 'Premium',
-    price: '$59/mo',
-    features: ['All Pro features', 'Dedicated manager'],
+    price: '$79/mo',
+    features: ['Everything Pro', 'Dedicated manager', 'API'],
   },
 ];
