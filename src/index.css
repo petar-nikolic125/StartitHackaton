@@ -7,12 +7,57 @@ body {
 }
 
 .nav-link {
-  @apply text-gray-200 hover:text-white focus:text-white transition relative px-2 py-1;
+  @apply text-gray-200 hover:text-white focus:text-white transition-all duration-150 relative px-2 py-1 bg-[length:0_2px] bg-no-repeat bg-bottom;
+  background-image: linear-gradient(to right, theme('colors.primary'), theme('colors.accent'));
 }
-.nav-link.active {
-  @apply text-white font-semibold border-gradient;
+.nav-link.active,
+.nav-link:hover,
+.nav-link:focus {
+  @apply text-white;
+  background-size: 100% 2px;
 }
 
 .border-gradient {
   @apply border-b-2 border-transparent bg-gradient-to-r from-primary via-secondary to-accent bg-[length:100%_2px] bg-no-repeat bg-bottom;
+}
+
+.pulsing-underline {
+  position: relative;
+}
+.pulsing-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  background-image: linear-gradient(to right, theme('colors.primary'), theme('colors.accent'));
+  animation: pulseUnderline 2s infinite ease-out;
+}
+
+@keyframes pulseUnderline {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.hero-gradient {
+  background: linear-gradient(45deg, theme('colors.primary'), theme('colors.accent'), theme('colors.secondary'));
+  background-size: 400% 400%;
+  animation: heroGradient 6s infinite;
+}
+
+@keyframes heroGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }

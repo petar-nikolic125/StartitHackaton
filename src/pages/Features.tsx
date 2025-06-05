@@ -5,7 +5,7 @@ export default function Features() {
   return (
     <div className="max-w-7xl mx-auto px-6" id="features">
       <h2 className="text-3xl font-bold text-white text-center mb-8">Speed → Revenue</h2>
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 gap-6">
         {features.map((f) => (
           <Card key={f.title} className="text-center space-y-3">
             <div className="text-4xl" aria-hidden="true">
