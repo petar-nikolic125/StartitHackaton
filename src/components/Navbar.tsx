@@ -1,29 +1,58 @@
 import { FC } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export const Navbar: FC = () => {
+  const linkBase =
+    "px-4 py-2 text-sm font-medium transition-colors duration-200";
+  const linkInactive = "text-white/70 hover:text-white";
+  const linkActive =
+    "text-white border-b-2 border-gradient-to-r from-[#FF3CAC] via-[#784BA0] to-[#2B86C5]";
+
   return (
-    <header className="fixed top-0 left-0 w-full z-10 bg-[#1A0021] py-4 px-4 md:px-16 flex justify-between items-center">
-      <Link to="/" className="hero-nav__logo">GramCourses</Link>
-      <nav className="hidden md:block">
-        <ul className="flex space-x-6">
-          <li>
-            <Link to="/features" className="text-white/70 hover:text-white px-4 py-2">
-              Features
-            </Link>
-          </li>
-          <li>
-            <Link to="/pricing" className="text-white/70 hover:text-white px-4 py-2">
-              Pricing
-            </Link>
-          </li>
-          <li>
-            <Link to="/creators" className="text-white/70 hover:text-white px-4 py-2">
-              Creators
-            </Link>
-          </li>
-        </ul>
-      </nav>
-    </header>
+    <nav className="fixed top-0 left-0 w-full bg-[#1A0021] bg-opacity-90 backdrop-blur-sm z-10">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-12 h-16">
+        <NavLink
+          to="/"
+          className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#FF3CAC] via-[#784BA0] to-[#2B86C5]"
+        >
+          GramCourses
+        </NavLink>
+        <div className="hidden md:flex space-x-4">
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              `${linkBase} ${isActive ? linkActive : linkInactive}`
+            }
+          >
+            Home
+          </NavLink>
+          <NavLink
+            to="/features"
+            className={({ isActive }) =>
+              `${linkBase} ${isActive ? linkActive : linkInactive}`
+            }
+          >
+            Features
+          </NavLink>
+          <NavLink
+            to="/pricing"
+            className={({ isActive }) =>
+              `${linkBase} ${isActive ? linkActive : linkInactive}`
+            }
+          >
+            Pricing
+          </NavLink>
+          <NavLink
+            to="/creators"
+            className={({ isActive }) =>
+              `${linkBase} ${isActive ? linkActive : linkInactive}`
+            }
+          >
+            Creators
+          </NavLink>
+        </div>
+      </div>
+    </nav>
   );
 };

@@ -3,9 +3,7 @@ import type { FC } from "react";
 import { PhoneMockup } from "./PhoneMockup";
 import { LiveCounter } from "./LiveCounter";
 import { VideoModal } from "./VideoModal";
-import { SeenOn } from "./SeenOn";
 import { StickyCTA } from "./StickyCTA";
-import { VouchSection } from "./VouchSection";
 
 const Hero: FC = () => (
     <div className="bg-page-gradient bg-fixed text-white min-h-screen relative">
@@ -37,10 +35,6 @@ const Hero: FC = () => (
             transition
           " />
 
-                    {/* Seen On Logos */}
-                    <div className="mt-4 opacity-80 hover:opacity-100 transition-opacity">
-                        <SeenOn />
-                    </div>
 
                     {/* Primary CTA */}
                     <button className="hero-cta mt-6 focus:ring-4 focus:ring-accent1/50">
@@ -91,9 +85,6 @@ const Hero: FC = () => (
         transition
       " />
         </section>
-
-        {/* ─── VOUCH / TRUST SECTION ──────────────────────────────────────────────── */}
-        <VouchSection />
     </div>
 );
 
