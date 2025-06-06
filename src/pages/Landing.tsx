@@ -7,30 +7,29 @@ import { Section } from '../components/scroll/Section'
 
 export default function Landing() {
     return (
-        <div className="bg-seamless-gradient bg-fixed text-white">
+        <div className="bg-seamless-gradient bg-fixed bg-cover">
             {/** ──────────────────────────────────────────────────
              HOME SECTION (Hero)
+             – transparent (no solid bg), faint neon wash overlay
              ─────────────────────────────────────────────────── */}
             <Section
                 id="home"
                 className="
           relative overflow-hidden
           min-h-screen
+          bg-transparent             /* ← transparent so seamless-gradient shows */
           flex items-center justify-center
         "
             >
-                {/** Very faint neon “wash” behind (–z-20) */}
+                {/** Very faint neon wash overlay (–z-20) */}
                 <div
                     className="
             absolute inset-0
-            bg-gradient-to-br
-              from-primary/5
-              via-secondary/5
-              to-accent/5
+            bg-gradient-to-br from-insta-purple/5 via-insta-blue/5 to-insta-pink/5
             -z-20
           "
                 />
-                {/** Hero Content (z-10) */}
+
                 <div className="relative z-10 w-full">
                     <Home />
                 </div>
@@ -38,16 +37,18 @@ export default function Landing() {
 
             {/** ──────────────────────────────────────────────────
              FEATURES SECTION
+             – transparent, faint rainbow wash overlay
              ─────────────────────────────────────────────────── */}
             <Section
                 id="features"
                 className="
           relative overflow-hidden
           min-h-screen
+          bg-transparent             /* transparent to show seamless gradient */
           flex items-center justify-center
         "
             >
-                {/** Very faint “rainbow” wash behind (–z-20) */}
+                {/** Very faint Instagram‐rainbow wash behind (–z-20) */}
                 <div
                     className="
             absolute inset-0
@@ -56,19 +57,6 @@ export default function Landing() {
           "
                 />
 
-                {/** Single drifting orb behind cards (–z-10, NO blur) */}
-                <div
-                    className="
-            absolute top-[-10%] right-[-5%]
-            w-96 h-96 rounded-full
-            bg-gradient-to-br from-insta-pink/30 via-insta-purple/20 to-insta-blue/10
-            opacity-80
-            animate-floatY
-            -z-10
-          "
-                />
-
-                {/** Features content wrapper (z-10) */}
                 <div className="relative z-10 w-full">
                     <Features />
                 </div>
@@ -76,27 +64,26 @@ export default function Landing() {
 
             {/** ──────────────────────────────────────────────────
              PRICING SECTION
+             – transparent, subtle neon tint
              ─────────────────────────────────────────────────── */}
             <Section
                 id="pricing"
                 className="
           relative overflow-hidden
           min-h-screen
+          bg-transparent             /* transparent to keep seamless BG */
           flex items-center justify-center
         "
             >
-                {/** Very subtle gradient wash (–z-20) */}
+                {/** Subtle neon‐gradient wash behind (–z-20) */}
                 <div
                     className="
             absolute inset-0
-            bg-gradient-to-br
-              from-insta-purple/5
-              via-insta-blue/5
-              to-insta-pink/5
+            bg-gradient-to-br from-insta-purple/5 via-insta-blue/5 to-insta-pink/5
             -z-20
           "
                 />
-                {/** Pricing content wrapper (z-10) */}
+
                 <div className="relative z-10 w-full">
                     <Pricing />
                 </div>
@@ -104,27 +91,26 @@ export default function Landing() {
 
             {/** ──────────────────────────────────────────────────
              CREATORS SECTION
+             – transparent, gentle neon tint
              ─────────────────────────────────────────────────── */}
             <Section
                 id="creators"
                 className="
           relative overflow-hidden
           min-h-screen
+          bg-transparent             /* transparent, no own bg color */
           flex items-center justify-center
         "
             >
-                {/** Very faint neon “wash” (–z-20) */}
+                {/** Very faint neon‐pink→purple wash (–z-20) */}
                 <div
                     className="
             absolute inset-0
-            bg-gradient-to-br
-              from-insta-pink/5
-              via-insta-purple/5
-              to-insta-blue/5
+            bg-gradient-to-br from-insta-pink/5 via-insta-purple/5 to-insta-blue/5
             -z-20
           "
                 />
-                {/** Creators content wrapper (z-10) */}
+
                 <div className="relative z-10 w-full">
                     <Creators />
                 </div>

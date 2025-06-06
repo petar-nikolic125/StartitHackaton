@@ -14,47 +14,17 @@ export default function Creators() {
         relative overflow-hidden
         w-full max-w-6xl mx-auto px-6 lg:px-12 xl:px-24
         py-24
-        bg-dark2                           /* solid dark2 base */
-        before:absolute before:inset-0 before:scroll-warp /* subtle warp if you still want it */
+        bg-transparent                           /* transparent so the global gradient shows */
       "
         >
             {/** ─────────────────────────────────────────────────
-             Subtle “neon wash” behind everything (–z-20), NO blur on cards
+             Subtle “neon wash” behind everything (–z-20)
              ───────────────────────────────────────────────── */}
             <div
                 className="
           absolute inset-0
           bg-gradient-to-br from-insta-pink/5 via-insta-purple/5 to-insta-blue/5
           -z-20
-        "
-            />
-
-            {/** ─────────────────────────────────────────────────
-             Crisp neon orbs behind cards (–z-10), entirely no blur
-             ───────────────────────────────────────────────── */}
-            {/* Top-left orb */}
-            <div
-                className="
-          absolute top-[-10%] left-[-5%]
-          w-80 h-80 rounded-full
-          bg-gradient-to-tr from-insta-pink/30 via-insta-purple/20 to-insta-blue/10
-          opacity-60
-          /* NO blur here */
-          animate-floatY
-          -z-10
-        "
-            />
-
-            {/* Bottom-right orb */}
-            <div
-                className="
-          absolute bottom-[-10%] right-[-5%]
-          w-64 h-64 rounded-full
-          bg-gradient-to-br from-insta-orange/30 via-insta-yellow/20 to-insta-pink/10
-          opacity-60
-          /* NO blur here */
-          animate-floatX
-          -z-10
         "
             />
 
@@ -105,14 +75,10 @@ export default function Creators() {
                         key={c.handle}
                         className="
               relative
-              /* Remove backdrop-blur-md entirely: */
-              /* glass-card replaced with simple dark semi-opaque panel: */
-              bg-dark1/40
-
+              bg-dark1/40                          /* semi-opaque dark panel (no blur) */
               hover:floatY
               hover:shadow-card-lg
               transform transition-transform duration-400 ease-out
-
               border border-dark-overlay
               p-6
               cursor-pointer
@@ -145,7 +111,6 @@ export default function Creators() {
                 bg-dark2
                 mx-auto
                 flex items-center justify-center
-                /* No blur on avatar container */
                 animate-avatar-glow                                   /* pulsing glow */
                 hover:scale-110 transition-transform duration-300 ease-out
                 mb-4
@@ -180,7 +145,7 @@ export default function Creators() {
                         </h3>
                         <p className="text-sm text-gray-400 text-center mb-4">@{c.handle}</p>
 
-                        {/** ─── Quote Text (z-neg) ───────────────────────────── */}
+                        {/** ─── Quote Text ───────────────────────────── */}
                         <p
                             className="
                 italic text-gray-300 text-center
@@ -197,7 +162,6 @@ export default function Creators() {
 
             {/** ─────────────────────────────────────────────────
              Modal for Selected Creator (z-50)
-             You can keep a tiny backdrop blur if you want, or remove it entirely.
              ───────────────────────────────────────────────── */}
             <Modal open={Boolean(selected)} onClose={() => setSelected(null)}>
                 {selected && (
@@ -205,7 +169,6 @@ export default function Creators() {
                         className="
               relative overflow-hidden
               bg-dark1/60
-
               border border-dark-overlay
               rounded-2xl p-8 max-w-md mx-auto
               shadow-card-lg                            /* neon shadow around modal */
@@ -221,7 +184,6 @@ export default function Creators() {
                 bg-dark2
                 mx-auto
                 flex items-center justify-center
-                /* No blur on avatar */
                 animate-avatar-glow                     /* pulsing glow */
                 hover:scale-110 transition-transform duration-300 ease-out
                 mb-6

@@ -1,3 +1,4 @@
+// src/components/Pricing.tsx
 import { useState } from 'react'
 import { tiers } from '../data/tiers'
 import { Card } from '../components/ui/Card'
@@ -20,20 +21,28 @@ export default function Pricing() {
             className="
         relative overflow-hidden
         min-h-screen
-        bg-dark1                                   /* NEW: deep dark background */
-        before:absolute before:inset-0 before:scroll-warp /* NEW: subtle warp effect */
+        bg-transparent                            /* transparent so seamless-gradient shows */
         flex flex-col items-center
         py-16 px-6 lg:px-12 xl:px-24
       "
         >
+            {/** Very faint neon‐gradient wash behind (–z-20) */}
+            <div
+                className="
+          absolute inset-0
+          bg-gradient-to-br from-insta-purple/5 via-insta-blue/5 to-insta-pink/5
+          -z-20
+        "
+            />
+
             {/* Section Heading */}
             <h2
                 className="
           text-3xl md:text-4xl lg:text-5xl font-extrabold
           text-transparent bg-clip-text
           bg-gradient-to-r from-electric-magenta via-hyper-purple to-cyber-teal
-          animate-text-gradient                       /* NEW: continuous shimmer */
-          drop-shadow-2xl                             /* NEW: neon glow */
+          animate-text-gradient                       /* continuous shimmer */
+          drop-shadow-2xl                             /* neon glow */
           text-center mb-12 z-10
         "
             >
@@ -48,12 +57,12 @@ export default function Pricing() {
             border-2 border-primary
             ${
                         !yearly
-                            ? 'bg-primary/20 text-white animate-glow-pulse' /* NEW: active glowy state */
+                            ? 'bg-primary/20 text-white animate-glow-pulse'    /* active glowy state */
                             : 'bg-dark2 text-gray-400 hover:text-white hover:bg-primary/30 transition-colors duration-300'
                     }
-            focus:outline-none focus:ring-4 focus:ring-electric-magenta /* NEW: neon focus ring */
+            focus:outline-none focus:ring-4 focus:ring-electric-magenta /* neon focus ring */
             transform transition-transform duration-300
-            hover:scale-105                                /* NEW: pop on hover */
+            hover:scale-105                                          /* pop on hover */
           `}
                     onClick={() => setYearly(false)}
                     aria-pressed={!yearly}
@@ -66,12 +75,12 @@ export default function Pricing() {
             border-2 border-primary
             ${
                         yearly
-                            ? 'bg-primary/20 text-white animate-glow-pulse' /* NEW: active glowy state */
+                            ? 'bg-primary/20 text-white animate-glow-pulse'     /* active glowy state */
                             : 'bg-dark2 text-gray-400 hover:text-white hover:bg-primary/30 transition-colors duration-300'
                     }
-            focus:outline-none focus:ring-4 focus:ring-electric-magenta /* NEW: neon focus ring */
+            focus:outline-none focus:ring-4 focus:ring-electric-magenta /* neon focus ring */
             transform transition-transform duration-300
-            hover:scale-105                                /* NEW: pop on hover */
+            hover:scale-105                                          /* pop on hover */
           `}
                     onClick={() => setYearly(true)}
                     aria-pressed={yearly}
@@ -83,12 +92,12 @@ export default function Pricing() {
             {/* “Pick Pro Now” CTA */}
             <Button
                 className="
-          btn-primary                                 /* NEW: neon gradient + glow */
-          hover:glow-accent                           /* NEW: accent glow on hover */
-          focus:ring-6 focus:ring-neon-amber          /* NEW: neon focus ring */
+          btn-primary                                 /* neon gradient + glow */
+          hover:glow-accent                           /* accent glow on hover */
+          focus:ring-6 focus:ring-neon-amber          /* neon focus ring */
           mb-12 w-full max-w-xs
           transform transition-transform duration-300
-          hover:scale-105                             /* NEW: pop on hover */
+          hover:scale-105                             /* pop on hover */
           z-10
         "
                 onClick={() => document.getElementById('wizard')?.classList.remove('hidden')}
@@ -101,17 +110,15 @@ export default function Pricing() {
                 {tiers.map((t) => (
                     <Card
                         key={t.name}
-                        className={`
+                        className="
               relative
-              glass-card                                /* NEW: glassmorphic panel */
-              hover:floatY                              /* NEW: 3D float on hover */
-              hover:shadow-card-lg                      /* NEW: deeper neon shadow */
-              transform transition-transform duration-400 ease-out
-              bg-dark1/60                               /* translucent dark bg */
-              border border-dark-overlay                /* NEW: subtle dark border */
-              p-10                                       /* NEW: padding inside card */
+              bg-dark1/60                              /* translucent dark bg (no blur) */
+              border border-dark-overlay                /* subtle dark border */
+              p-10                                      /* padding inside card */
               text-center space-y-6
-            `}
+              hover:shadow-card-lg                      /* deeper neon shadow on hover */
+              transform transition-transform duration-400 ease-out
+            "
                     >
                         {/* Highlight Badge */}
                         {t.highlight && (
@@ -119,10 +126,10 @@ export default function Pricing() {
                                 className="
                   absolute -top-5 left-1/2 -translate-x-1/2
                   px-5 py-2 rounded-full text-xs font-semibold text-white
-                  bg-gradient-to-r from-secondary via-accent to-primary /* NEW: vibrant badge gradient */
-                  shadow-lg                                           /* NEW: badge glow */
-                  animate-badge-pulse                                  /* NEW: pulsing badge */
-                  hover:badge-shake                                    /* NEW: subtle shake on hover */
+                  bg-gradient-to-r from-secondary via-accent to-primary /* vibrant badge gradient */
+                  shadow-lg                                           /* badge glow */
+                  animate-badge-pulse                                  /* pulsing badge */
+                  hover:badge-shake                                    /* subtle shake on hover */
                   transition-all duration-300 ease-in-out
                   z-20
                 "
@@ -136,9 +143,9 @@ export default function Pricing() {
                             className="
                 text-2xl md:text-3xl font-extrabold
                 text-transparent bg-clip-text
-                bg-gradient-to-r from-primary via-accent to-secondary /* NEW: shimmering tier name */
-                animate-text-gradient                                /* NEW: continuous shimmer */
-                drop-shadow-xl                                        /* NEW: neon glow shadow */
+                bg-gradient-to-r from-primary via-accent to-secondary /* shimmering tier name */
+                animate-text-gradient                                /* continuous shimmer */
+                drop-shadow-xl                                        /* neon glow shadow */
               "
                         >
                             {t.name}
@@ -149,9 +156,9 @@ export default function Pricing() {
                             className="
                 text-4xl md:text-5xl font-extrabold
                 text-transparent bg-clip-text
-                bg-gradient-to-r from-electric-magenta via-hyper-purple to-cyber-teal /* NEW: premium gradient */
-                animate-text-gradient                                            /* NEW: continuous shimmer */
-                drop-shadow-2xl                                                   /* NEW: neon glow */
+                bg-gradient-to-r from-electric-magenta via-hyper-purple to-cyber-teal /* premium gradient */
+                animate-text-gradient                                            /* continuous shimmer */
+                drop-shadow-2xl                                                   /* neon glow */
                 my-4
               "
                             animate={{ rotateX: yearly ? 180 : 0 }}
@@ -167,9 +174,9 @@ export default function Pricing() {
                                     key={f}
                                     className="
                     flex items-center space-x-2
-                    before:content-['✓'] before:text-primary               /* NEW: checkmark icon */
-                    before:animate-badge-pulse                             /* NEW: pulsing checkmark */
-                    hover:text-white transition-colors duration-200        /* NEW: brighten on hover */
+                    before:content-['✓'] before:text-primary               /* checkmark icon */
+                    before:animate-badge-pulse                             /* pulsing checkmark */
+                    hover:text-white transition-colors duration-200        /* brighten on hover */
                   "
                                 >
                                     <span className="flex-1">{f}</span>
@@ -180,12 +187,12 @@ export default function Pricing() {
                         {/* “Choose Plan” Button */}
                         <Button
                             className="
-                btn-primary                                   /* NEW: neon gradient + glow */
-                hover:glow-accent                             /* NEW: accent glow on hover */
-                focus:ring-6 focus:ring-neon-amber            /* NEW: neon focus ring */
+                btn-primary                                   /* neon gradient + glow */
+                hover:glow-accent                             /* accent glow on hover */
+                focus:ring-6 focus:ring-neon-amber            /* neon focus ring */
                 mt-6 w-full
                 transform transition-transform duration-300
-                hover:scale-105                               /* NEW: pop on hover */
+                hover:scale-105                               /* pop on hover */
               "
                             onClick={() => document.getElementById('wizard')?.classList.remove('hidden')}
                         >
@@ -194,9 +201,6 @@ export default function Pricing() {
                     </Card>
                 ))}
             </div>
-
-            {/* Subtle Background Glow Overlay */}
-            <div className="absolute inset-0 pointer-events-none animate-bg-glow-pulse opacity-20" />
         </section>
     )
 }

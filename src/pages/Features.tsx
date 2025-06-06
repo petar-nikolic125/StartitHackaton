@@ -10,7 +10,7 @@ export default function Features() {
         relative overflow-hidden
         max-w-7xl mx-auto px-6 lg:px-12 xl:px-24
         py-16
-        bg-dark2                          /* very dark base */
+        bg-transparent                           /* transparent so seamless-gradient shows */
         before:absolute before:inset-0 before:scroll-warp  /* subtle warp effect */
       "
         >
@@ -69,15 +69,12 @@ export default function Features() {
                         key={f.title}
                         className="
               relative
-              glass-card                                        /* frosted‐glass look panel (but no actual blur) */
-              hover:floatY                                      /* lift on hover */
-              hover:shadow-card-lg                              /* deeper glow on hover */
+              bg-dark1/40                               /* translucent dark bg (no blur) */
+              border border-dark-overlay                /* subtle dark border */
+              p-8                                        /* generous padding */
+              text-center space-y-6                     /* spacing */
+              hover:shadow-card-lg                       /* deeper glow on hover */
               transform transition-transform duration-400 ease-out
-              bg-dark1/40                                       /* translucent dark bg (no blur) */
-              border border-dark-overlay                         /* subtle border */
-              p-8                                                /* generous padding */
-              text-center space-y-6                               /* spacing */
-              overflow-visible
             "
                     >
                         {/** Icon Container */}

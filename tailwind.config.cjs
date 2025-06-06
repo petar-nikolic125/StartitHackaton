@@ -11,13 +11,13 @@ module.exports = {
         dark1: '#0F0D1A',
         dark2: '#1A1A2E',
 
-        // Your existing neon palette
+        // Neon palette
         primary: '#FF3CAC',
         secondary: '#784BA0',
         accent: '#2B86C5',
         'dark-overlay': 'rgba(0, 0, 0, 0.5)',
 
-        // New Instagram‐inspired palette
+        // Instagram‐inspired palette
         'insta-yellow': '#FEDA77',
         'insta-orange': '#FA7E1E',
         'insta-pink':   '#D62976',
@@ -26,22 +26,28 @@ module.exports = {
       },
 
       backgroundImage: {
-        // Your existing gradients
+        // ====================================================================
+        // 1) Single seamless, long‐page gradient. Apply “bg-seamless-gradient
+        //    bg-fixed bg-cover” once at your app’s root so that it stays
+        //    anchored behind every section (Home → Features → Pricing → Creators).
+        // ====================================================================
+        'seamless-gradient': 'linear-gradient(to bottom, #0F0D1A, #1A1A2E, #0F0D1A)',
+
+        // ====================================================================
+        // 2) (Optional) Keep any other standalone gradients you still want to
+        //    layer on top—for example, for a phone screen or text. But they
+        //    will sit above the anchored “seamless-gradient.”
+        // ====================================================================
         'page-gradient':  'linear-gradient(to bottom, #2b0030, #0f0d1a)',
         'hero-gradient':  'linear-gradient(45deg, #FF3CAC, #784BA0, #2B86C5)',
         'pulse-gradient': 'radial-gradient(circle at center, rgba(255,60,172,0.3), transparent 70%)',
 
-        // New Instagram‐style transitions
         'insta-gradient-1': 'linear-gradient(45deg, #FEDA77, #FA7E1E)',
         'insta-gradient-2': 'linear-gradient(45deg, #FA7E1E, #D62976)',
         'insta-gradient-3': 'linear-gradient(45deg, #D62976, #962FBF)',
         'insta-gradient-4': 'linear-gradient(45deg, #962FBF, #4F5BD5)',
 
-        // Full Instagram spectrum (yellow→orange→pink→purple→blue)
         'insta-spectrum': 'linear-gradient(45deg, #FEDA77, #FA7E1E, #D62976, #962FBF, #4F5BD5)',
-
-        // Long background for entire landing page
-        'seamless-gradient': 'linear-gradient(to bottom, #0F0D1A, #1A1A2E, #0F0D1A)',
       },
 
       boxShadow: {
@@ -53,19 +59,17 @@ module.exports = {
       },
 
       keyframes: {
-        // Text‐gradient animation for headings
+        // Text‐gradient animation for headings or shimmering text
         textGradientShift: {
           '0%, 100%': { 'background-position': '0% 50%' },
           '50%':      { 'background-position': '100% 50%' },
         },
-
-        // Icon‐card moving gradient
+        // Icon‐card gradient shift (if used anywhere)
         cardGradient: {
           '0%, 100%': { 'background-position': '0% 50%' },
           '50%':      { 'background-position': '100% 50%' },
         },
-
-        // For our phones or any “scale/pulse” effect
+        // Phone scale/pulse
         phoneScale: {
           '0%, 100%': { transform: 'scale(0.95)' },
           '50%':      { transform: 'scale(1)' },
@@ -74,50 +78,42 @@ module.exports = {
           '0%, 100%': { opacity: '0.4' },
           '50%':      { opacity: '1' },
         },
-
-        // General neon “pulse” that fades in and out
+        // General neon pulse
         glowPulse: {
           '0%, 100%': { opacity: '0.5' },
           '50%':      { opacity: '1' },
         },
-
-        // Instagram‐spectrum gradient shift
+        // Instagram-spectrum gradient shift
         instaSpectrumShift: {
           '0%, 100%': { 'background-position': '0% 50%' },
           '50%':      { 'background-position': '100% 50%' },
         },
-
-        // Badge‐pulse for “Most Popular” or partner logos
+        // Badge-pulse for “Most Popular” labels or partner logos
         badgePulse: {
           '0%, 100%': { transform: 'scale(1)' },
           '50%':      { transform: 'scale(1.1)' },
         },
-
-        // Avatar subtle glow
+        // Avatar subtle glow (opacity pulse)
         avatarGlow: {
           '0%, 100%': { opacity: '0.4' },
           '50%':      { opacity: '1' },
         },
-
-        // A quick shake for badges on hover
+        // Badge shake (for labels on hover)
         badgeShake: {
           '0%, 100%': { transform: 'translateX(0)' },
           '25%':      { transform: 'translateX(2px)' },
           '75%':      { transform: 'translateX(-2px)' },
         },
-
-        // Decorative divider swing
+        // Divider swing
         dividerSwing: {
           '0%, 100%': { transform: 'translateX(-50%) scaleX(1)' },
           '50%':      { transform: 'translateX(-50%) scaleX(1.3)' },
         },
-
-        // Pulsing underline
+        // Underline pulse
         underlinePulse: {
           '0%, 100%': { opacity: '0.3', transform: 'scaleX(1)' },
           '50%':      { opacity: '1',   transform: 'scaleX(1.2)' },
         },
-
         // Background “fog” pulse (very low opacity)
         bgGlowPulse: {
           '0%, 100%': { opacity: '0' },

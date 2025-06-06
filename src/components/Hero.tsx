@@ -24,7 +24,7 @@ export default function Hero() {
           className="
         relative overflow-hidden snap-container
         min-h-screen
-        bg-dark1                            /* deep, dark base */
+        bg-transparent                         /* no solid bg—shows seamless-gradient */
         flex flex-col md:flex-row
         items-center justify-between
         px-6 md:px-12 lg:px-24
