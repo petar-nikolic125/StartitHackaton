@@ -33,7 +33,7 @@ html {
 }
 
 .snap-container {
-  scroll-snap-type: y mandatory;
+  /* Removed scroll-snap to allow free scrolling */
   scroll-padding-top: 5rem;
   overscroll-behavior-y: none;
 }

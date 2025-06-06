@@ -23,7 +23,6 @@ export function useScrollContext() {
 export function ScrollProvider({ children }: { children: ReactNode }) {
   const [currentId, setCurrentId] = useState('');
   const sections = useRef<Section[]>([]);
-
   const observer = useRef<IntersectionObserver>();
 
   useEffect(() => {
@@ -35,9 +34,6 @@ export function ScrollProvider({ children }: { children: ReactNode }) {
           if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
             const id = (entry.target as HTMLElement).dataset.sectionId!;
             setCurrentId(id);
-            if (window.location.hash !== `#${id}`) {
-              history.replaceState(null, '', `#${id}`);
-            }
           }
         });
       },
