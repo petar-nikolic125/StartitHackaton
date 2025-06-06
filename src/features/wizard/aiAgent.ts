@@ -9,7 +9,7 @@ export const wizardApi = createApi({
   endpoints: (builder) => ({
     generatePricing: builder.mutation<PricingData, Basics>({
       query: (basics) => ({
-        url: "/api/ai/pricing",
+        url: "/pricing",
         method: "POST",
         body: basics,
       }),
@@ -19,7 +19,7 @@ export const wizardApi = createApi({
       { basics: Basics; pricing: PricingData }
     >({
       query: ({ basics, pricing }) => ({
-        url: "/api/ai/marketing",
+        url: "/marketing",
         method: "POST",
         body: { basics, pricing },
       }),
