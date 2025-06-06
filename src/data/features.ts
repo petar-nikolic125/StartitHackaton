@@ -1,48 +1,48 @@
-// File: src/data/features.ts
+import type { ReactElement } from 'react';
+import {
+  RocketLaunchIcon,
+  BanknotesIcon,
+  ChartBarIcon,
+  LinkIcon,
+  SwatchIcon,
+  LifebuoyIcon,
+} from '@heroicons/react/24/solid';
 
 export interface Feature {
-  /**
-   * A succinct, benefit-oriented headline for this feature
-   * (e.g., “Launch in 4 Minutes”).
-   */
+  icon: ReactElement;
   title: string;
-
-  /**
-   * A very short, action-oriented description (≤ 10 words)
-   * that drives home the benefit of this feature.
-   */
   text: string;
 }
 
-/**
- * A curated list of six core features. Each object holds
- * the title and ultra-concise description. Icons (and
- * animations, gradients, etc.) should be applied at the
- * component level (e.g., in <FeatureCard />).
- */
 export const features: Feature[] = [
   {
-    title: 'Launch in 4 Minutes',
-    text: 'Go live instantly—no technical setup required.',
+    icon: <RocketLaunchIcon className="w-8 h-8 text-primary" />,
+    title: 'Fast Setup',
+    text: 'Setup in minutes.',
   },
   {
-    title: 'Built-In Payments',
-    text: 'Stripe, Apple Pay, Google Pay—zero integration.',
+    icon: <BanknotesIcon className="w-8 h-8 text-primary" />,
+    title: 'Payments',
+    text: 'Stripe & Apple Pay out-of-box.',
   },
   {
-    title: 'Live Sales Analytics',
-    text: 'Track conversion rates and revenue in real time.',
+    icon: <ChartBarIcon className="w-8 h-8 text-primary" />,
+    title: 'Analytics',
+    text: 'Know what converts.',
   },
   {
-    title: 'Custom gram.link',
-    text: 'Claim your vanity URL: gram.link/username.',
+    icon: <LinkIcon className="w-8 h-8 text-primary" />,
+    title: 'gram.link',
+    text: 'Shareable vanity URL.',
   },
   {
-    title: 'Brand Customization',
-    text: 'Fonts, colors, layouts—match your unique style.',
+    icon: <SwatchIcon className="w-8 h-8 text-primary" />,
+    title: 'Customization',
+    text: 'Match your brand.',
   },
   {
-    title: '24/7 Creator Support',
-    text: 'Live chat and email—always here to help.',
+    icon: <LifebuoyIcon className="w-8 h-8 text-primary" />,
+    title: 'Support',
+    text: '24 / 7 creator chat.',
   },
 ];

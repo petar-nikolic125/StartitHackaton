@@ -8,7 +8,7 @@ export default function Creators() {
   const [selected, setSelected] = useState<Creator | null>(null);
 
   return (
-    <div className="max-w-5xl mx-auto px-6" id="creators">
+    <div className="max-w-5xl mx-auto px-6">
       <h2 className="text-3xl font-bold text-white text-center mb-8">Success Stories</h2>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
         {creators.map((c) => (
