@@ -23,7 +23,6 @@ export function useScrollContext() {
 export function ScrollProvider({ children }: { children: ReactNode }) {
   const [currentId, setCurrentId] = useState('');
   const sections = useRef<Section[]>([]);
-
   const observer = useRef<IntersectionObserver>();
 
   useEffect(() => {
