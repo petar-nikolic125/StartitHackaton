@@ -16,7 +16,7 @@ export const Card: FC<CardProps> = ({
     <div
         {...rest} /* Spread all other div attributes, including onClick */
         className={clsx(
-            'rounded-2xl bg-dark2 p-6 text-gray-100 shadow-lg',
+            'rounded-xl bg-dark1/80 border border-dark-overlay p-6 text-gray-100 shadow-card-lg',
             hover &&
             'transform transition-all duration-200 hover:-translate-y-1 hover:ring-2 hover:ring-primary/50',
             className
