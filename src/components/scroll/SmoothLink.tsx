@@ -1,7 +1,6 @@
 import React, { AnchorHTMLAttributes } from 'react';
 import clsx from 'clsx';
 import { useScrollContext } from './ScrollProvider';
-import { smoothScroll } from './smoothScroll';
 
 interface Props extends AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string; // expects “#sectionId”
@@ -9,13 +8,12 @@ interface Props extends AnchorHTMLAttributes<HTMLAnchorElement> {
 }
 
 export function SmoothLink({ href, className, children, ...rest }: Props) {
-  const { sections, currentId } = useScrollContext();
+  const { currentId } = useScrollContext();
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     const id = href.replace('#', '');
-    const el = sections.current.find((s) => s.id === id)?.el;
-    if (el) smoothScroll(el);
+    window.location.hash = id;
   };
 
   const active = currentId === href.replace('#', '');
