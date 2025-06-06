@@ -11,4 +11,5 @@ export interface PricingData {
 export interface MarketingData {
   captions: string[];
   hashtags: string[];
+  bestTimes?: Array<{ time: string; count: number }>;
 }

@@ -1,18 +1,47 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/ui/Button";
+import { motion } from "framer-motion";
+import { setStatus } from "./wizardSlice";
 import type { RootState } from "../../store";
+import { useWizardGuard } from "./useWizardGuard";
 
 interface Props {
   onBack: () => void;
 }
 
 export function ReviewPublishStep({ onBack }: Props) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { basics, pricing, marketing } = useSelector(
     (s: RootState) => s.wizard,
   );
+  useWizardGuard(3);
+
+  const handlePublish = async () => {
+    await fetch("/api/courses", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ basics, pricing, marketing }),
+    });
+    dispatch(setStatus("published"));
+    navigate("/dashboard");
+  };
+
+  const stripeConnectUrl = `https://connect.stripe.com/express/oauth/authorize?client_id=${
+    import.meta.env.VITE_STRIPE_PK
+  }&scope=read_write`;
 
   return (
-    <div className="space-y-4">
+    <motion.div
+      className="space-y-4"
+      variants={{
+        initial: { opacity: 0, x: -20 },
+        animate: { opacity: 1, x: 0 },
+      }}
+      initial="initial"
+      animate="animate"
+    >
       <pre className="bg-dark2 p-4 rounded-md text-sm whitespace-pre-wrap">
         {JSON.stringify({ basics, pricing, marketing }, null, 2)}
       </pre>
@@ -20,8 +49,16 @@ export function ReviewPublishStep({ onBack }: Props) {
         <Button onClick={onBack} variant="solid">
           Back
         </Button>
-        <Button>Publish</Button>
+        <div className="space-x-2">
+          <Button
+            variant="solid"
+            onClick={() => window.open(stripeConnectUrl, "_blank")}
+          >
+            Connect Stripe
+          </Button>
+          <Button onClick={handlePublish}>Publish</Button>
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

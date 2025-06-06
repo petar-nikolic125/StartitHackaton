@@ -23,3 +23,9 @@ VITE_STRIPE_PK=<your-stripe-publishable-key>
 ```
 
 These keys power the pricing and marketing steps during the AI onboarding flow.
+
+Run the dev server with:
+
+```bash
+npm run dev
+```

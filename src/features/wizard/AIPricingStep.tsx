@@ -1,10 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPricing } from "./wizardSlice";
 import { useGeneratePricingMutation } from "./aiAgent";
 import { Button } from "../../components/ui/Button";
 import { LoadingDots } from "../../components/LoadingDots";
+import { motion } from "framer-motion";
 import type { RootState } from "../../store";
+import { useWizardGuard } from "./useWizardGuard";
 
 interface Props {
   onNext: () => void;
@@ -15,6 +17,10 @@ export function AIPricingStep({ onNext, onBack }: Props) {
   const dispatch = useDispatch();
   const basics = useSelector((s: RootState) => s.wizard.basics);
   const [generatePricing, { data, isLoading }] = useGeneratePricingMutation();
+  const [tiers, setTiers] = useState<Array<{ label: string; price: number }>>(
+    [],
+  );
+  useWizardGuard(1);
 
   useEffect(() => {
     if (basics) {
@@ -24,22 +30,56 @@ export function AIPricingStep({ onNext, onBack }: Props) {
 
   useEffect(() => {
     if (data) {
-      dispatch(setPricing(data));
+      setTiers(data.tiers);
     }
-  }, [data, dispatch]);
+  }, [data]);
+
+  const handleNext = () => {
+    dispatch(setPricing({ tiers }));
+    onNext();
+  };
 
   return (
-    <div className="space-y-4">
+    <motion.div
+      className="space-y-4"
+      variants={{
+        initial: { opacity: 0, x: -20 },
+        animate: { opacity: 1, x: 0 },
+      }}
+      initial="initial"
+      animate="animate"
+    >
       {isLoading && (
         <div className="text-center py-10">
           <LoadingDots />
         </div>
       )}
-      {data && (
+      {tiers.length > 0 && (
         <ul className="space-y-2">
-          {data.tiers.map((t) => (
-            <li key={t.label} className="bg-dark2 rounded-md p-2">
-              {t.label}: ${t.price}
+          {tiers.map((t, idx) => (
+            <li
+              key={t.label}
+              className="bg-dark2 rounded-md p-2 flex space-x-2"
+            >
+              <input
+                className="bg-transparent flex-1"
+                value={t.label}
+                onChange={(e) => {
+                  const copy = [...tiers];
+                  copy[idx].label = e.target.value;
+                  setTiers(copy);
+                }}
+              />
+              <input
+                type="number"
+                className="w-20 bg-transparent"
+                value={t.price}
+                onChange={(e) => {
+                  const copy = [...tiers];
+                  copy[idx].price = Number(e.target.value);
+                  setTiers(copy);
+                }}
+              />
             </li>
           ))}
         </ul>
@@ -48,10 +88,10 @@ export function AIPricingStep({ onNext, onBack }: Props) {
         <Button onClick={onBack} variant="solid">
           Back
         </Button>
-        <Button onClick={onNext} disabled={!data}>
+        <Button onClick={handleNext} disabled={isLoading || !tiers.length}>
           Next
         </Button>
       </div>
-    </div>
+    </motion.div>
   );
 }

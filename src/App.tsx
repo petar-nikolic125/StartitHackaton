@@ -4,7 +4,7 @@ import { Layout } from "./layout/Layout";
 import { ProgressBar } from "./components/ui/ProgressBar";
 
 const Landing = lazy(() => import("./pages/Landing"));
-const WizardLayout = lazy(() => import("./features/wizard/WizardLayout"));
+const WizardLayout = lazy(() => import("./features/wizard"));
 const AIDemoModal = lazy(() => import("./components/modals/AIDemoModal"));
 
 export function App() {
