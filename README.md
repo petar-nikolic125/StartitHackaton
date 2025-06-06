@@ -18,11 +18,13 @@ npm run test:e2e  # Cypress smoke tests
 Set the following environment variables before running the wizard:
 
 ```bash
-VITE_OPENAI_API_URL=<your-ai-endpoint>
-VITE_STRIPE_PK=<your-stripe-publishable-key>
+VITE_OPENAI_API_URL=https://api.openai.example.com
+VITE_STRIPE_PK=pk_test_XXXXXXXXXXXXXXXX
 ```
 
 These keys power the pricing and marketing steps during the AI onboarding flow.
+Click **Start Free Store** on the home page to begin. At any time you can click
+“Exit Wizard” in the top‑right corner to clear your progress and return home.
 
 Run the dev server with:
 
