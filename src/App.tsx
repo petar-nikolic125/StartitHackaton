@@ -15,7 +15,7 @@ export function App() {
         <Suspense fallback={<div className="p-8">Loading...</div>}>
           <Routes>
             <Route path="/" element={<Landing />} />
-            <Route path="/wizard" element={<WizardLayout />} />
+            <Route path="/wizard/:stepIndex?" element={<WizardLayout />} />
             <Route path="/demo" element={<AIDemoModal />} />
           </Routes>
         </Suspense>
