@@ -1,48 +1,48 @@
-import type { ReactElement } from 'react';
-import {
-  RocketLaunchIcon,
-  BanknotesIcon,
-  ChartBarIcon,
-  LinkIcon,
-  SwatchIcon,
-  LifebuoyIcon,
-} from '@heroicons/react/24/solid';
+// File: src/data/features.ts
 
 export interface Feature {
-  icon: ReactElement;
+  /**
+   * A succinct, benefit-oriented headline for this feature
+   * (e.g., “Launch in 4 Minutes”).
+   */
   title: string;
+
+  /**
+   * A very short, action-oriented description (≤ 10 words)
+   * that drives home the benefit of this feature.
+   */
   text: string;
 }
 
+/**
+ * A curated list of six core features. Each object holds
+ * the title and ultra-concise description. Icons (and
+ * animations, gradients, etc.) should be applied at the
+ * component level (e.g., in <FeatureCard />).
+ */
 export const features: Feature[] = [
   {
-    icon: <RocketLaunchIcon className="w-8 h-8 text-primary" />,
-    title: 'Fast Setup',
-    text: 'Setup in minutes.',
+    title: 'Launch in 4 Minutes',
+    text: 'Go live instantly—no technical setup required.',
   },
   {
-    icon: <BanknotesIcon className="w-8 h-8 text-primary" />,
-    title: 'Payments',
-    text: 'Stripe & Apple Pay out-of-box.',
+    title: 'Built-In Payments',
+    text: 'Stripe, Apple Pay, Google Pay—zero integration.',
   },
   {
-    icon: <ChartBarIcon className="w-8 h-8 text-primary" />,
-    title: 'Analytics',
-    text: 'Know what converts.',
+    title: 'Live Sales Analytics',
+    text: 'Track conversion rates and revenue in real time.',
   },
   {
-    icon: <LinkIcon className="w-8 h-8 text-primary" />,
-    title: 'gram.link',
-    text: 'Shareable vanity URL.',
+    title: 'Custom gram.link',
+    text: 'Claim your vanity URL: gram.link/username.',
   },
   {
-    icon: <SwatchIcon className="w-8 h-8 text-primary" />,
-    title: 'Customization',
-    text: 'Match your brand.',
+    title: 'Brand Customization',
+    text: 'Fonts, colors, layouts—match your unique style.',
   },
   {
-    icon: <LifebuoyIcon className="w-8 h-8 text-primary" />,
-    title: 'Support',
-    text: '24 / 7 creator chat.',
+    title: '24/7 Creator Support',
+    text: 'Live chat and email—always here to help.',
   },
 ];
