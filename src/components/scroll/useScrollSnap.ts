@@ -35,6 +35,7 @@ export function useScrollSnap() {
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
       if (Math.abs(e.deltaY) < 50) return;
+      e.preventDefault();
       handler(e.deltaY > 0 ? 1 : -1);
     };
     const onTouchStart = (e: TouchEvent) => {
@@ -42,11 +43,14 @@ export function useScrollSnap() {
     };
     const onTouchEnd = (e: TouchEvent) => {
       const diff = touchStart.current - e.changedTouches[0].clientY;
-      if (Math.abs(diff) > 50) handler(diff > 0 ? 1 : -1);
+      if (Math.abs(diff) > 50) {
+        e.preventDefault();
+        handler(diff > 0 ? 1 : -1);
+      }
     };
-    window.addEventListener('wheel', onWheel, { passive: true });
-    window.addEventListener('touchstart', onTouchStart, { passive: true });
-    window.addEventListener('touchend', onTouchEnd, { passive: true });
+    window.addEventListener('wheel', onWheel, { passive: false });
+    window.addEventListener('touchstart', onTouchStart, { passive: false });
+    window.addEventListener('touchend', onTouchEnd, { passive: false });
     return () => {
       window.removeEventListener('wheel', onWheel);
       window.removeEventListener('touchstart', onTouchStart);
