@@ -28,6 +28,16 @@ body {
   background-size: 4px 4px;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+.snap-container {
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: 5rem;
+  overscroll-behavior-y: none;
+}
+
 /*========================================================
   Navbar & Navigation Links
 ========================================================*/

@@ -15,7 +15,7 @@ export default function Pricing() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-6" id="pricing">
+    <div className="max-w-5xl mx-auto px-6">
       <h2 className="text-3xl font-bold text-white text-center mb-8">Pricing & Plans</h2>
       <div className="flex justify-center mb-6">
         <button
