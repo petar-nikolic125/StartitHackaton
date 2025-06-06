@@ -12,3 +12,14 @@ npm test          # unit tests
 npm run lint      # lint codebase
 npm run test:e2e  # Cypress smoke tests
 ```
+
+## AI Wizard Flow
+
+Set the following environment variables before running the wizard:
+
+```bash
+VITE_OPENAI_API_URL=<your-ai-endpoint>
+VITE_STRIPE_PK=<your-stripe-publishable-key>
+```
+
+These keys power the pricing and marketing steps during the AI onboarding flow.
