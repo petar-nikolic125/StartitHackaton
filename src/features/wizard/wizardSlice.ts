@@ -15,6 +15,10 @@ const initialState: WizardState = {
   status: "idle",
 };
 
+/**
+ * We export the slice object itself (named export) so tests can import `wizardSlice`.
+ * We will also default‐export the slice’s reducer at the bottom.
+ */
 export const wizardSlice = createSlice({
   name: "wizard",
   initialState,
@@ -37,5 +41,12 @@ export const wizardSlice = createSlice({
   },
 });
 
+// Named export of actions for use in both tests and components:
 export const { setBasics, setPricing, setMarketing, setStatus, reset } =
-  wizardSlice.actions;
+    wizardSlice.actions;
+
+// ─── Default‐export the reducer ─────────────────────────────────────────────────
+// This line makes it possible to do:
+//   import wizardReducer from "./wizardSlice";
+// in `store.ts` without error.
+export default wizardSlice.reducer;
