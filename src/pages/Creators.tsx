@@ -205,8 +205,6 @@ export default function Creators() {
                         className="
               relative overflow-hidden
               bg-dark1/60
-              /* If you still want a slight blur behind the modal panel, keep this, otherwise remove: */
-              backdrop-blur-lg
 
               border border-dark-overlay
               rounded-2xl p-8 max-w-md mx-auto

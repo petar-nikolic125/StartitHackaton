@@ -39,6 +39,9 @@ module.exports = {
 
         // Full Instagram spectrum (yellow→orange→pink→purple→blue)
         'insta-spectrum': 'linear-gradient(45deg, #FEDA77, #FA7E1E, #D62976, #962FBF, #4F5BD5)',
+
+        // Long background for entire landing page
+        'seamless-gradient': 'linear-gradient(to bottom, #0F0D1A, #1A1A2E, #0F0D1A)',
       },
 
       boxShadow: {

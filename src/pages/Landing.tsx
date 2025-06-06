@@ -7,7 +7,7 @@ import { Section } from '../components/scroll/Section'
 
 export default function Landing() {
     return (
-        <>
+        <div className="bg-seamless-gradient bg-fixed text-white">
             {/** ──────────────────────────────────────────────────
              HOME SECTION (Hero)
              ─────────────────────────────────────────────────── */}
@@ -16,7 +16,6 @@ export default function Landing() {
                 className="
           relative overflow-hidden
           min-h-screen
-          bg-dark1                   /* deep blackish‐purple */
           flex items-center justify-center
         "
             >
@@ -45,7 +44,6 @@ export default function Landing() {
                 className="
           relative overflow-hidden
           min-h-screen
-          bg-dark2                   /* slightly lighter than dark1 */
           flex items-center justify-center
         "
             >
@@ -84,7 +82,6 @@ export default function Landing() {
                 className="
           relative overflow-hidden
           min-h-screen
-          bg-dark1
           flex items-center justify-center
         "
             >
@@ -113,7 +110,6 @@ export default function Landing() {
                 className="
           relative overflow-hidden
           min-h-screen
-          bg-dark2
           flex items-center justify-center
         "
             >
@@ -133,6 +129,6 @@ export default function Landing() {
                     <Creators />
                 </div>
             </Section>
-        </>
+        </div>
     )
 }

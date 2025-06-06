@@ -107,7 +107,7 @@ export default function Pricing() {
               hover:floatY                              /* NEW: 3D float on hover */
               hover:shadow-card-lg                      /* NEW: deeper neon shadow */
               transform transition-transform duration-400 ease-out
-              bg-dark1/60 backdrop-blur-md               /* NEW: translucent backdrop-blur */
+              bg-dark1/60                               /* translucent dark bg */
               border border-dark-overlay                /* NEW: subtle dark border */
               p-10                                       /* NEW: padding inside card */
               text-center space-y-6
@@ -196,7 +196,7 @@ export default function Pricing() {
             </div>
 
             {/* Subtle Background Glow Overlay */}
-            <div className="absolute inset-0 pointer-events-none animate-bg-glow-pulse opacity-20 blur-3xl" />
+            <div className="absolute inset-0 pointer-events-none animate-bg-glow-pulse opacity-20" />
         </section>
     )
 }
