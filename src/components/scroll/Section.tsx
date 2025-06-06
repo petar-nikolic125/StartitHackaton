@@ -1,6 +1,7 @@
 // src/components/scroll/Section.tsx
-import { HTMLAttributes, useRef, ReactNode } from 'react';
+import { HTMLAttributes, useRef, ReactNode, useEffect } from 'react';
 import clsx from 'clsx';
+import { useScrollContext } from './ScrollProvider';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
     id: string;
@@ -10,11 +11,19 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 
 export function Section({ id, className, children, ...rest }: Props) {
     const ref = useRef<HTMLDivElement>(null);
+    const { register } = useScrollContext();
+
+    useEffect(() => {
+        if (ref.current) {
+            register(id, ref.current);
+        }
+    }, [id, register]);
 
     return (
         <div
             id={id}
             ref={ref}
+            data-section-id={id}
             className={clsx('min-h-screen', className)}
             {...rest}
         >
