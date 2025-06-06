@@ -1,10 +1,10 @@
-import { AnchorHTMLAttributes } from 'react';
+import React, { AnchorHTMLAttributes } from 'react';
 import clsx from 'clsx';
 import { useScrollContext } from './ScrollProvider';
 import { smoothScroll } from './smoothScroll';
 
 interface Props extends AnchorHTMLAttributes<HTMLAnchorElement> {
-  href: string; // expects #id
+  href: string; // expects “#sectionId”
   className?: string;
 }
 
@@ -21,14 +21,14 @@ export function SmoothLink({ href, className, children, ...rest }: Props) {
   const active = currentId === href.replace('#', '');
 
   return (
-    <a
-      href={href}
-      onClick={handleClick}
-      className={clsx(className, active && 'active')}
-      aria-current={active ? 'page' : undefined}
-      {...rest}
-    >
-      {children}
-    </a>
+      <a
+          href={href}
+          onClick={handleClick}
+          className={clsx(className, active && 'active')}
+          aria-current={active ? 'page' : undefined}
+          {...rest}
+      >
+        {children}
+      </a>
   );
 }

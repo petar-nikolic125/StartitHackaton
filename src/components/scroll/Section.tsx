@@ -1,33 +1,24 @@
-import { HTMLAttributes, useEffect, useRef } from 'react';
-import { useScrollContext } from './ScrollProvider';
+// src/components/scroll/Section.tsx
+import { HTMLAttributes, useRef, ReactNode } from 'react';
 import clsx from 'clsx';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  id: string;
-  snap?: 'start' | 'center' | 'end';
+    id: string;
+    className?: string;
+    children: ReactNode;
 }
 
-export function Section({ id, snap = 'start', className, ...rest }: Props) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { sections } = useScrollContext();
+export function Section({ id, className, children, ...rest }: Props) {
+    const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    sections.current.push({ id, el });
-    el.dataset.sectionId = id;
-    return () => {
-      sections.current = sections.current.filter((s) => s.id !== id);
-    };
-  }, [id, sections]);
-
-  return (
-    <div
-      id={id}
-      ref={ref}
-      data-section-id={id}
-      className={clsx('min-h-screen', `snap-${snap}`, className)}
-      {...rest}
-    />
-  );
+    return (
+        <div
+            id={id}
+            ref={ref}
+            className={clsx('min-h-screen', className)}
+            {...rest}
+        >
+            {children}
+        </div>
+    );
 }
