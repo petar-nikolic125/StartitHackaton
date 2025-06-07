@@ -39,3 +39,4 @@ Start the AI simulation server in another terminal:
 ```bash
 npm run server
 ```
+The API server listens on `http://localhost:3001` by default.
