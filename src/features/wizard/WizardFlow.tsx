@@ -13,6 +13,7 @@ import {
   ReviewPublishStep,
   type ReviewHandles,
 } from "./ReviewPublishStep";
+import { SimulationRunner } from "../simulator/SimulationRunner";
 
 import {
   setBasics,
@@ -46,6 +47,7 @@ export default function WizardFlow() {
   useSelector((s: RootState) => s.wizard.basics);
 
   const [idx, setIdx] = useState(Number(stepIndex) || 0);
+  const [runningSimId, setRunningSimId] = useState<string | null>(null);
   const online = useNetworkStatus();
 
   // keep idx in sync with the URL
@@ -92,8 +94,8 @@ export default function WizardFlow() {
     if (idx === 2) dispatch(setMarketing(data as any));
 
     if (idx === steps.length - 1) {
-      // final “Launch” on ReviewPublishStep
-      await reviewRef.current!.launch();
+      const simId = await reviewRef.current!.launch();
+      if (simId) setRunningSimId(simId);
     } else {
       setIdx((i) => Math.min(i + 1, steps.length - 1));
     }
@@ -135,6 +137,18 @@ export default function WizardFlow() {
           >
             Exit Wizard
           </button>
+          {runningSimId && (
+            <button
+              className="text-sm text-gray-400 hover:underline"
+              onClick={() => {
+                dispatch(reset());
+                setRunningSimId(null);
+                navigate('/');
+              }}
+            >
+              Close Simulation
+            </button>
+          )}
         </div>
 
         {/* Step content with animations */}
@@ -147,11 +161,10 @@ export default function WizardFlow() {
             exit="exit"
           >
             {/* Step 0 is controlled inline */}
-            {idx === 0 ? (
-              <BusinessInfoStep
-                onNext={handleInfoNext}
-                onBack={handleExit}
-              />
+            {runningSimId ? (
+              <SimulationRunner simId={runningSimId} />
+            ) : idx === 0 ? (
+              <BusinessInfoStep onNext={handleInfoNext} onBack={handleExit} />
             ) : (
               <CurrentStep ref={currentRef as any} />
             )}
@@ -159,7 +172,7 @@ export default function WizardFlow() {
         </AnimatePresence>
 
         {/* Bottom nav only for steps > 0 */}
-        {idx > 0 && (
+        {idx > 0 && !runningSimId && (
           <div className="flex justify-between pt-4">
             <Button
               onClick={handleBack}

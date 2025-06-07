@@ -5,7 +5,6 @@ import {
   useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { LoadingDots } from '../../components/LoadingDots';
 import { Toast } from '../../components/ui/Toast';
@@ -35,13 +34,12 @@ export interface ReviewHandles {
 
 export const ReviewPublishStep = forwardRef<ReviewHandles>((_, ref) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const data = useSelector((s: RootState) => s.wizard);
   const [startSim] = useStartSimMutation();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const launch = async () => {
+  const launch = async (): Promise<string | undefined> => {
     if (!data.basics) return;
     try {
       setError('');
@@ -64,9 +62,10 @@ export const ReviewPublishStep = forwardRef<ReviewHandles>((_, ref) => {
         }),
       );
 
-      navigate(`/simulation/${res.simId}`);
+      return res.simId;
     } catch {
       setError('Failed to start simulation. Please try again.');
+      return undefined;
     } finally {
       setLoading(false);
     }

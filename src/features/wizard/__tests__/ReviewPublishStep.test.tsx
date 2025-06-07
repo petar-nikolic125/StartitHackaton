@@ -7,13 +7,7 @@ import { wizardSlice } from '../wizardSlice';
 import simulationReducer from '../../simulator/simSlice';
 import { ReviewPublishStep, type ReviewHandles } from '../ReviewPublishStep';
 
-const navigateMock = jest.fn();
 const startMock = jest.fn();
-
-jest.mock('react-router-dom', () => {
-  const actual = jest.requireActual('react-router-dom');
-  return { ...actual, useNavigate: () => navigateMock };
-});
 
 jest.mock('../../simulator/simApi', () => ({
   useStartSimMutation: () => [ (args: any) => ({ unwrap: () => startMock(args) }) ],
@@ -44,12 +38,13 @@ test('launches simulation and dispatches session', async () => {
     forecast: { months: [] },
   });
   const { store, ref } = setup();
+  let returned: string | undefined;
   await act(async () => {
-    await ref.current?.launch();
+    returned = await ref.current!.launch();
   });
   expect(startMock).toHaveBeenCalled();
   expect(store.getState().simulation.simId).toBe('123');
-  expect(navigateMock).toHaveBeenCalledWith('/simulation/123');
+  expect(returned).toBe('123');
 });
 
 test('shows error on failure', async () => {
