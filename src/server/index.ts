@@ -4,6 +4,7 @@ import aiRoutes from "./routes/ai";
 export function createExpressApp() {
   const app = express();
   app.use(express.json());
+  app.get('/ping', (_, res): void => { res.sendStatus(200); });
   app.use("/api", aiRoutes);
   return app;
 }

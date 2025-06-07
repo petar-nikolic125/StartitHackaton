@@ -16,7 +16,7 @@ test('start parses AI response', async () => {
   mockedChat.mockResolvedValue('{"pricing":[],"weekPlan":{"tasks":[]},"forecast":{"months":[]}}');
   const session = new AISession({ niche: 'x', productType: 'y', targetPriceRange: '$' });
   const out = await session.start();
-  expect(out.weekPlan).toBeDefined();
+  expect(Array.isArray(out.pricing)).toBe(true);
   expect(mockedChat).toHaveBeenCalled();
 });
 
