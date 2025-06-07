@@ -6,6 +6,7 @@ interface SimState {
   weekPlan: WeekPlan | null;
   forecast: Forecast | null;
   advice: string[];
+  status: 'idle' | 'running' | 'paused';
 }
 
 const initialState: SimState = {
@@ -13,6 +14,7 @@ const initialState: SimState = {
   weekPlan: null,
   forecast: null,
   advice: [],
+  status: 'idle',
 };
 
 export const simSlice = createSlice({
@@ -23,11 +25,15 @@ export const simSlice = createSlice({
       state.simId = action.payload.simId;
       state.weekPlan = action.payload.weekPlan;
       state.forecast = action.payload.forecast;
+      state.status = 'running';
     },
     addAdvice(state, action: PayloadAction<{ weekPlan: WeekPlan; forecast: Forecast; advice: string }>) {
       state.weekPlan = action.payload.weekPlan;
       state.forecast = action.payload.forecast;
       state.advice.push(action.payload.advice);
+    },
+    setStatus(state, action: PayloadAction<SimState['status']>) {
+      state.status = action.payload;
     },
     clearSession() {
       return initialState;
@@ -35,5 +41,5 @@ export const simSlice = createSlice({
   },
 });
 
-export const { setSession, addAdvice, clearSession } = simSlice.actions;
+export const { setSession, addAdvice, setStatus, clearSession } = simSlice.actions;
 export default simSlice.reducer;

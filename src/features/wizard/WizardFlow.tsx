@@ -20,6 +20,7 @@ import {
 import { useStartSimMutation } from "../simulator/simApi";
 import { setSession } from "../simulator/simSlice";
 import type { RootState } from "../../store";
+import { useNetworkStatus } from "../../hooks/useNetworkStatus";
 
 const fadeSlide = {
   initial: { opacity: 0, x: -20 },
@@ -44,6 +45,7 @@ export default function WizardFlow() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [startSim] = useStartSimMutation();
+  const online = useNetworkStatus();
 
   useEffect(() => {
     setIdx(Number(stepIndex) || 0);
@@ -110,6 +112,11 @@ export default function WizardFlow() {
           <Button onClick={handleNext}>Retry</Button>
         </div>
       )}
+      {!online && (
+        <div className="absolute inset-0 bg-black/70 flex items-center justify-center z-40 text-white">
+          Offline — reconnect to continue.
+        </div>
+      )}
       <div className="w-full max-w-lg space-y-6">
         <div className="flex justify-between items-center">
           <button className="text-sm text-gray-400 hover:underline" onClick={handleExit}>
@@ -128,10 +135,10 @@ export default function WizardFlow() {
           </motion.div>
         </AnimatePresence>
         <div className="flex justify-between pt-4">
-          <Button onClick={handleBack} variant="solid">
+          <Button onClick={handleBack} variant="solid" disabled={!online}>
             {idx === 0 ? "Exit" : "Back"}
           </Button>
-          <Button onClick={handleNext} disabled={!canNext}>
+          <Button onClick={handleNext} disabled={!canNext || !online}>
             {idx === steps.length - 1 ? "Start" : "Next"}
           </Button>
         </div>
