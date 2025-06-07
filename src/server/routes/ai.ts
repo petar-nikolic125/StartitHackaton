@@ -1,49 +1,50 @@
 import { Router } from "express";
 import { AISession } from "../aiSession";
-import { chat } from "../openaiHelper";
 
 const sessions = new Map<string, AISession>();
 
 const router = Router();
 
-router.post("/simulation/start", async (req, res) => {
-  const { basics } = req.body;
-  const session = new AISession(basics);
-  const aiResponse = await chat(session.messages);
-  session.addAssistant(aiResponse);
-  sessions.set(session.id, session);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+router.post("/simulation/start", async (req: any, res: any) => {
   try {
-    res.json({ simId: session.id, ...JSON.parse(aiResponse) });
-  } catch {
-    res.json({ simId: session.id, text: aiResponse });
+    const { basics } = req.body;
+    const session = new AISession(basics);
+    const out = await session.start();
+    sessions.set(session.id, session);
+    res.json({ simId: session.id, ...out });
+  } catch (err: unknown) {
+    const e = err as Error & { message?: string };
+    res.status(502).json({ error: "AI_ERROR", message: String(e.message || e) });
   }
 });
 
-router.post("/simulation/next-step", async (req, res) => {
-  const { simId, metrics } = req.body;
-  const session = sessions.get(simId);
-  if (!session) return res.status(404).json({ error: "invalid simId" });
-  session.addUser(`Metrics update: ${JSON.stringify(metrics)}`);
-  const aiResponse = await chat(session.messages);
-  session.addAssistant(aiResponse);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+router.post("/simulation/next-step", async (req: any, res: any) => {
   try {
-    res.json(JSON.parse(aiResponse));
-  } catch {
-    res.json({ text: aiResponse });
+    const { simId, metrics } = req.body;
+    const session = sessions.get(simId);
+    if (!session) return res.status(404).json({ error: "invalid simId" });
+    const out = await session.next(metrics);
+    res.json(out);
+  } catch (err: unknown) {
+    const e = err as Error & { message?: string };
+    res.status(502).json({ error: "AI_ERROR", message: String(e.message || e) });
   }
 });
 
-router.post("/simulation/end", async (req, res) => {
-  const { simId } = req.body;
-  const session = sessions.get(simId);
-  if (!session) return res.status(404).json({ error: "invalid simId" });
-  session.addUser("End simulation and summarize results");
-  const aiResponse = await chat(session.messages);
-  sessions.delete(simId);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+router.post("/simulation/end", async (req: any, res: any) => {
   try {
-    res.json(JSON.parse(aiResponse));
-  } catch {
-    res.json({ text: aiResponse });
+    const { simId } = req.body;
+    const session = sessions.get(simId);
+    if (!session) return res.status(404).json({ error: "invalid simId" });
+    const out = await session.end();
+    sessions.delete(simId);
+    res.json(out);
+  } catch (err: unknown) {
+    const e = err as Error & { message?: string };
+    res.status(502).json({ error: "AI_ERROR", message: String(e.message || e) });
   }
 });
 

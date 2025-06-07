@@ -21,6 +21,7 @@ Set the following environment variables before running the wizard and API server
 VITE_OPENAI_API_URL=https://api.openai.example.com
 VITE_STRIPE_PK=pk_test_XXXXXXXXXXXXXXXX
 OPENAI_KEY=<your-openai-secret>
+PORT=3001
 ```
 
 These keys power the pricing and marketing steps during the AI onboarding flow.
@@ -32,3 +33,10 @@ Run the dev server with:
 ```bash
 npm run dev
 ```
+
+Start the AI simulation server in another terminal:
+
+```bash
+npm run server
+```
+The API server listens on `http://localhost:3001` by default.

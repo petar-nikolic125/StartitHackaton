@@ -1,5 +1,5 @@
 import express from "express";
-import aiRoutes from "./routes/ai.js";
+import aiRoutes from "./routes/ai";
 
 export function createExpressApp() {
   const app = express();
@@ -8,7 +8,7 @@ export function createExpressApp() {
   return app;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (typeof require !== 'undefined' && require.main === module) {
   const port = process.env.PORT || 3001;
   const app = createExpressApp();
   app.listen(port, () => {

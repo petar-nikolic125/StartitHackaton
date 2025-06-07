@@ -6,6 +6,7 @@ import { ProgressBar } from "./components/ui/ProgressBar";
 const Landing = lazy(() => import("./pages/Landing"));
 const WizardLayout = lazy(() => import("./features/wizard"));
 const AIDemoModal = lazy(() => import("./components/modals/AIDemoModal"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
 
 export function App() {
   return (
@@ -17,6 +18,7 @@ export function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/wizard/:stepIndex?" element={<WizardLayout />} />
             <Route path="/demo" element={<AIDemoModal />} />
+            <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         </Suspense>
       </Layout>
