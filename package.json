@@ -4,14 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently \"npm run server\" \"vite\"",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "jest",
     "test:e2e": "cypress run",
     "format": "prettier --write .",
-    "server": "ts-node src/server/index.ts"
+    "server": "ts-node-dev src/server/index.ts"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.2",
@@ -19,6 +19,7 @@
     "@reduxjs/toolkit": "^2.8.2",
     "clsx": "^2.1.1",
     "express": "^5.1.0",
+    "cors": "^2.8.5",
     "framer-motion": "^12.8.0",
     "lottie-react": "^2.4.1",
     "openai": "^5.1.1",
@@ -37,6 +38,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@types/express": "^5.0.2",
+    "@types/cors": "^2.8.13",
     "@types/jest": "^29.5.14",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
@@ -58,6 +60,8 @@
     "tailwindcss": "^3.4.3",
     "ts-jest": "^29.3.4",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "concurrently": "^8.2.2",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.26.1",
     "vite": "^6.3.1",

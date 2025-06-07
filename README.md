@@ -6,7 +6,7 @@ Rebooted landing experience built with React, Vite and Tailwind CSS. UI componen
 
 ```bash
 npm install       # install dependencies
-npm run dev       # start dev server
+npm run dev       # run front-end and API server together
 npm run build     # production build
 npm test          # unit tests
 npm run lint      # lint codebase
@@ -28,13 +28,13 @@ These keys power the pricing and marketing steps during the AI onboarding flow.
 Click **Start Free Store** on the home page to begin. At any time you can click
 “Exit Wizard” in the top‑right corner to clear your progress and return home.
 
-Run the dev server with:
+Run both servers in one command:
 
 ```bash
 npm run dev
 ```
 
-Start the AI simulation server in another terminal:
+To run only the API server use:
 
 ```bash
 npm run server
