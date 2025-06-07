@@ -15,11 +15,12 @@ npm run test:e2e  # Cypress smoke tests
 
 ## AI Wizard Flow
 
-Set the following environment variables before running the wizard:
+Set the following environment variables before running the wizard and API server:
 
 ```bash
 VITE_OPENAI_API_URL=https://api.openai.example.com
 VITE_STRIPE_PK=pk_test_XXXXXXXXXXXXXXXX
+OPENAI_KEY=<your-openai-secret>
 ```
 
 These keys power the pricing and marketing steps during the AI onboarding flow.
