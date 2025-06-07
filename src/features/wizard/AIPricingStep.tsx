@@ -9,6 +9,7 @@ import type { RootState } from "../../store";
 import { useGeneratePricingMutation } from "./aiAgent";
 import { LoadingDots } from "../../components/LoadingDots";
 import { Toast } from "../../components/ui/Toast";
+import { Button } from "../../components/ui/Button";
 import { motion } from "framer-motion";
 import { useWizardGuard } from "./useWizardGuard";
 import type { PricingData } from "./types";
@@ -21,9 +22,11 @@ export interface PricingHandles {
 export const AIPricingStep = forwardRef<PricingHandles>((_, ref) => {
   const basics = useSelector((s: RootState) => s.wizard.basics);
   const pricing = useSelector((s: RootState) => s.wizard.pricing);
-  const [generatePricing, { data, isLoading }] = useGeneratePricingMutation();
+  const [generatePricing, { data, error, isLoading }] =
+    useGeneratePricingMutation();
   const [tiers, setTiers] = useState<Array<{ label: string; price: number }>>([]);
   const [toast, setToast] = useState("");
+  const [errMsg, setErrMsg] = useState("");
   useWizardGuard(1);
 
   useEffect(() => {
@@ -34,6 +37,10 @@ export const AIPricingStep = forwardRef<PricingHandles>((_, ref) => {
   useEffect(() => {
     if (data) setTiers(data.tiers);
   }, [data]);
+
+  useEffect(() => {
+    if (error) setErrMsg('Failed to load pricing data.');
+  }, [error]);
 
   const validate = () => {
     const invalid = tiers.length === 0 || tiers.some((t) => !t.label || !t.price);
@@ -59,6 +66,12 @@ export const AIPricingStep = forwardRef<PricingHandles>((_, ref) => {
       {isLoading && (
         <div className="text-center py-10">
           <LoadingDots />
+        </div>
+      )}
+      {!isLoading && tiers.length === 0 && (
+        <div className="space-y-2 text-center">
+          <p>{errMsg || 'No pricing data available.'}</p>
+          <Button onClick={() => basics && generatePricing(basics)}>Retry</Button>
         </div>
       )}
       {tiers.length > 0 && (
