@@ -31,3 +31,22 @@ test("dispatches basics on next", () => {
   expect(state.basics?.niche).toBe("ai");
   expect(onNext).toHaveBeenCalled();
 });
+
+test("prefills form from state", () => {
+  const store = configureStore({ reducer: { wizard: wizardSlice.reducer } });
+  store.dispatch(
+    wizardSlice.actions.setBasics({
+      niche: "fitness",
+      productType: "video",
+      targetPriceRange: "$0-49",
+    }),
+  );
+  render(
+    <Provider store={store}>
+      <BusinessInfoStep onNext={jest.fn()} />
+    </Provider>,
+  );
+  expect(screen.getByLabelText(/your niche/i)).toHaveValue("fitness");
+  expect(screen.getByLabelText(/product type/i)).toHaveValue("video");
+  expect(screen.getByLabelText(/target price range/i)).toHaveValue("$0-49");
+});
