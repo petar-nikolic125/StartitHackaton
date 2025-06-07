@@ -1,3 +1,4 @@
+// src/features/wizard/ReviewPublishStep.tsx
 import {
   forwardRef,
   useImperativeHandle,
@@ -15,13 +16,20 @@ import type { RootState } from '../../store';
 import type { Basics, PricingData, MarketingData } from './types';
 
 export interface ReviewHandles {
+  /** Always valid at this late stage */
   isValid: () => boolean;
+
+  /** Pull all collected data back to the caller */
   getData: () => {
     basics: Basics | null;
     pricing: PricingData | null;
     marketing: MarketingData | null;
   };
+
+  /** Fire the simulation API */
   launch: () => Promise<void>;
+
+  /** Expose the current “launch in progress” state */
   isLaunching: () => boolean;
 }
 
@@ -38,19 +46,27 @@ export const ReviewPublishStep = forwardRef<ReviewHandles>((_, ref) => {
     try {
       setError('');
       setLoading(true);
+
       const res = await startSim({ basics: data.basics }).unwrap();
       dispatch(setSession({
-        simId: res.simId,
+        simId:    res.simId,
         weekPlan: res.weekPlan,
         forecast: res.forecast,
       }));
+
+      // persist for refresh
       localStorage.setItem(
         'currentSim',
-        JSON.stringify({ simId: res.simId, weekPlan: res.weekPlan, forecast: res.forecast }),
+        JSON.stringify({
+          simId:     res.simId,
+          weekPlan:  res.weekPlan,
+          forecast:  res.forecast,
+        }),
       );
+
       navigate(`/simulation/${res.simId}`);
     } catch {
-      setError('Failed to start simulation.');
+      setError('Failed to start simulation. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -70,15 +86,20 @@ export const ReviewPublishStep = forwardRef<ReviewHandles>((_, ref) => {
       initial="initial"
       animate="animate"
     >
+      {/* Summary of everything collected */}
       <pre className="bg-dark2 p-4 rounded-md text-sm whitespace-pre-wrap">
         {JSON.stringify(data, null, 2)}
       </pre>
+
+      {/* Full‐screen launch loader */}
       {loading && (
         <div className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center space-y-4 z-50 text-white">
           <LoadingDots />
           <p>Launching your AI Simulation…</p>
         </div>
       )}
+
+      {/* Full‐screen error overlay */}
       {error && (
         <div className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center space-y-4 z-50 text-white">
           <Toast message={error} onClose={() => setError('')} />

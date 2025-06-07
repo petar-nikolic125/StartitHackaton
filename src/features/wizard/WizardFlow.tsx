@@ -1,21 +1,27 @@
+// src/features/wizard/WizardFlow.tsx
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
+
 import { TimerBar } from "../../components/TimerBar";
 import { Button } from "../../components/ui/Button";
-import { BusinessInfoStep } from './BusinessInfoStep';
+import { BusinessInfoStep } from "./BusinessInfoStep";
 import { AIPricingStep, type PricingHandles } from "./AIPricingStep";
 import { AIMarketingStep, type MarketingHandles } from "./AIMarketingStep";
-import { ReviewPublishStep, type ReviewHandles } from "./ReviewPublishStep";
+import {
+  ReviewPublishStep,
+  type ReviewHandles,
+} from "./ReviewPublishStep";
+
 import {
   setBasics,
-  setMarketing,
   setPricing,
+  setMarketing,
   reset,
 } from "./wizardSlice";
 import type { RootState } from "../../store";
-import type { Basics } from './types';
+import type { Basics } from "./types";
 import { useNetworkStatus } from "../../hooks/useNetworkStatus";
 
 const fadeSlide = {
@@ -29,17 +35,20 @@ const steps = [
   AIPricingStep,
   AIMarketingStep,
   ReviewPublishStep,
-];
+] as const;
 
 export default function WizardFlow() {
   const { stepIndex } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  useSelector((s: RootState) => s.wizard.basics); // trigger re-render when basics changes
+
+  // re-render when basics changes
+  useSelector((s: RootState) => s.wizard.basics);
 
   const [idx, setIdx] = useState(Number(stepIndex) || 0);
   const online = useNetworkStatus();
 
+  // keep idx in sync with the URL
   useEffect(() => {
     setIdx(Number(stepIndex) || 0);
   }, [stepIndex]);
@@ -48,32 +57,43 @@ export default function WizardFlow() {
     navigate(`/wizard/${idx}`, { replace: true });
   }, [idx, navigate]);
 
+  // refs for the steps that expose imperative API
   const priceRef = useRef<PricingHandles>(null);
   const marketingRef = useRef<MarketingHandles>(null);
   const reviewRef = useRef<ReviewHandles>(null);
+  const refs = [null, priceRef, marketingRef, reviewRef] as const;
 
-  const refs = [null, priceRef, marketingRef, reviewRef];
-  const Current = steps[idx];
-  const currentRef = refs[idx] as any;
+  const CurrentStep = steps[idx];
+  const currentRef = refs[idx] as
+    | React.RefObject<PricingHandles>
+    | React.RefObject<MarketingHandles>
+    | React.RefObject<ReviewHandles>;
 
+  // Step 0 handler: we collect basics here
   const handleInfoNext = ({ basics }: { basics: Basics }) => {
     dispatch(setBasics(basics));
     setIdx(1);
   };
 
+  // canNext is false if the current step’s isValid() fails or we’re launching
   const canNext =
     idx === 0
       ? true
-      : (currentRef?.current?.isValid?.() ?? false) &&
+      : (currentRef.current?.isValid?.() ?? false) &&
         !reviewRef.current?.isLaunching?.();
 
+  // generic Next button handler for steps 1–3
   const handleNext = async () => {
-    if (!currentRef.current?.isValid() || reviewRef.current?.isLaunching?.()) return;
+    if (!currentRef.current?.isValid?.() || reviewRef.current?.isLaunching?.())
+      return;
+
     const data = currentRef.current.getData();
     if (idx === 1) dispatch(setPricing(data as any));
-    else if (idx === 2) dispatch(setMarketing(data as any));
+    if (idx === 2) dispatch(setMarketing(data as any));
+
     if (idx === steps.length - 1) {
-      await reviewRef.current?.launch();
+      // final “Launch” on ReviewPublishStep
+      await reviewRef.current!.launch();
     } else {
       setIdx((i) => Math.min(i + 1, steps.length - 1));
     }
@@ -83,7 +103,7 @@ export default function WizardFlow() {
     if (idx === 1) {
       setIdx(0);
     } else if (idx === 0) {
-      navigate('/');
+      navigate("/");
     } else {
       setIdx((i) => Math.max(i - 1, 0));
     }
@@ -96,18 +116,28 @@ export default function WizardFlow() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6 bg-dark1 relative">
+      {/* Top timer */}
       <TimerBar currentStep={idx + 1} total={steps.length} />
+
+      {/* Offline overlay */}
       {!online && (
         <div className="absolute inset-0 bg-black/70 flex items-center justify-center z-40 text-white">
           Offline — reconnect to continue.
         </div>
       )}
+
       <div className="w-full max-w-lg space-y-6">
+        {/* ExitWizard link at top */}
         <div className="flex justify-between items-center">
-          <button className="text-sm text-gray-400 hover:underline" onClick={handleExit}>
+          <button
+            className="text-sm text-gray-400 hover:underline"
+            onClick={handleExit}
+          >
             Exit Wizard
           </button>
         </div>
+
+        {/* Step content with animations */}
         <AnimatePresence mode="wait">
           <motion.div
             key={idx}
@@ -116,20 +146,33 @@ export default function WizardFlow() {
             animate="animate"
             exit="exit"
           >
+            {/* Step 0 is controlled inline */}
             {idx === 0 ? (
-              <BusinessInfoStep onNext={handleInfoNext} onBack={handleExit} />
+              <BusinessInfoStep
+                onNext={handleInfoNext}
+                onBack={handleExit}
+              />
             ) : (
-              <Current ref={currentRef as any} />
+              <CurrentStep ref={currentRef as any} />
             )}
           </motion.div>
         </AnimatePresence>
+
+        {/* Bottom nav only for steps > 0 */}
         {idx > 0 && (
           <div className="flex justify-between pt-4">
-            <Button onClick={handleBack} variant="solid" disabled={!online}>
+            <Button
+              onClick={handleBack}
+              variant="solid"
+              disabled={!online}
+            >
               Back
             </Button>
-            <Button onClick={handleNext} disabled={!canNext || !online}>
-              {idx === steps.length - 1 ? 'Launch' : 'Next'}
+            <Button
+              onClick={handleNext}
+              disabled={!canNext || !online}
+            >
+              {idx === steps.length - 1 ? "Launch" : "Next"}
             </Button>
           </div>
         )}
