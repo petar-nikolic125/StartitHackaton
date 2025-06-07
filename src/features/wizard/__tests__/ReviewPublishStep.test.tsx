@@ -10,7 +10,7 @@ import { ReviewPublishStep, type ReviewHandles } from '../ReviewPublishStep';
 const startMock = jest.fn();
 
 jest.mock('../../simulator/simApi', () => ({
-  useStartSimMutation: () => [ (args: any) => ({ unwrap: () => startMock(args) }) ],
+  useStartSimMutation: () => [ (args: unknown) => ({ unwrap: () => startMock(args) }) ],
 }));
 
 function setup() {

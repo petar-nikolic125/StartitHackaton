@@ -11,7 +11,7 @@ const endMock = jest.fn();
 
 jest.mock('../simApi', () => ({
   useNextSimStepMutation: () => [
-    (args: any) => ({ unwrap: () => nextMock(args) }),
+    (args: unknown) => ({ unwrap: () => nextMock(args) }),
     { isLoading: false, error: null },
   ],
   useEndSimMutation: () => [

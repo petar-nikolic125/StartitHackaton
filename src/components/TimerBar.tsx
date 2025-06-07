@@ -8,11 +8,11 @@ interface TimerBarProps {
 export function TimerBar({ currentStep, total }: TimerBarProps) {
   // ── 1.  Figure out the percentage first ────────────────────────────────
   const pct =
-      typeof currentStep === "number" &&
-      typeof total === "number" &&
-      total > 0
-          ? Math.min(Math.max(currentStep / total, 0), 1) * 100
-          : 0;
+    typeof currentStep === "number" &&
+    typeof total === "number" &&
+    total > 0
+      ? Math.min(Math.max(currentStep / total, 0), 1) * 100
+      : 0;
 
   // ── 2.  Hooks are now unconditional (always executed) ──────────────────
   const [width, setWidth] = useState(pct);
