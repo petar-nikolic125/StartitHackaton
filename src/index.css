@@ -185,7 +185,7 @@ html {
   animation: underlinePulse 2s infinite ease-in-out;
 }
 
-/* Underline Link in Hero (e.g., “gram.link/yourname”) */
+/* Underline Link in Hero (e.g., “smart.link/yourname”) */
 .hero-link {
   @apply text-primary font-medium relative inline-block;
   background-image: linear-gradient(

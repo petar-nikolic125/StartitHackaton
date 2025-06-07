@@ -42,7 +42,7 @@ export default function Creators() {
           text-center mb-12
         "
             >
-                Success Stories
+                AI Founder Wins
             </h2>
 
             {/** ─────────────────────────────────────────────────
@@ -240,7 +240,7 @@ export default function Creators() {
               "
                             onClick={() => alert('view store')}
                         >
-                            View Store →
+                            View Launch →
                         </Button>
                     </div>
                 )}

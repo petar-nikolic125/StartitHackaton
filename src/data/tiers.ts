@@ -9,17 +9,17 @@ export const tiers: Tier[] = [
   {
     name: 'Basic',
     price: '$9/mo',
-    features: ['Unlimited courses', 'Vanity URL'],
+    features: ['Unlimited AI launches', 'Smart Product Link'],
   },
   {
     name: 'Pro',
     price: '$39/mo',
-    features: ['Analytics', 'Email capture', 'Priority support'],
+    features: ['AI Insights & Forecasts', 'AI email capture', 'Priority support'],
     highlight: true,
   },
   {
     name: 'Premium',
     price: '$79/mo',
-    features: ['Everything Pro', 'Dedicated manager', 'API'],
+    features: ['Everything Pro', 'Dedicated AI strategist', 'API access'],
   },
 ];

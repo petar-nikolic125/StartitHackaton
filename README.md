@@ -1,4 +1,4 @@
-# CourseGram
+# AI Business Coach
 
 Rebooted landing experience built with React, Vite and Tailwind CSS. UI components live under `src/components` and page routes in `src/pages`. Global layout and navigation sit in `src/layout`.
 
@@ -25,7 +25,7 @@ PORT=3001
 ```
 
 These keys power the pricing and marketing steps during the AI onboarding flow.
-Click **Start Free Store** on the home page to begin. At any time you can click
+Click **Launch with AI Now** on the home page to begin. At any time you can click
 “Exit Wizard” in the top‑right corner to clear your progress and return home.
 
 Run the dev server with:
