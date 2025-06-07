@@ -5,6 +5,7 @@ import React, {
   useState,
   useEffect,
   useRef,
+  useCallback,
 } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store";
@@ -57,7 +58,7 @@ const BusinessInfoStep = forwardRef<BusinessInfoHandles, BusinessInfoStepProps>(
     onChange?.({ niche, productType, targetPriceRange });
   }, [niche, productType, targetPriceRange, onChange]);
 
-  const validate = () => {
+  const validate = useCallback(() => {
     const errs: Record<string, string> = {};
     if (!niche) errs.niche = "Required";
     if (!productType) errs.productType = "Required";
@@ -83,7 +84,7 @@ const BusinessInfoStep = forwardRef<BusinessInfoHandles, BusinessInfoStepProps>(
     }
 
     return true;
-  };
+  }, [niche, productType, targetPriceRange]);
 
   // expose our two methods to the wizard container
   useImperativeHandle(
