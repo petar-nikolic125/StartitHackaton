@@ -21,7 +21,7 @@ import {
   reset as resetWizard,
 } from "./wizardSlice";
 import type { RootState } from "../../store";
-// import type { Basics } from "./types";                  ← removed unused import
+import type { Basics } from "./types";
 import { useNetworkStatus } from "../../hooks/useNetworkStatus";
 
 const fadeSlide = {
@@ -41,6 +41,11 @@ export default function WizardFlow() {
   const [idx, setIdx]                   = useState(Number(stepIndex) || 0);
   const [runningSimId, setRunningSimId] = useState<string | null>(null);
   const online                          = useNetworkStatus();
+  const [infoData, setInfoData]         = useState<Basics>({
+    niche: "",
+    productType: "",
+    targetPriceRange: "",
+  });
 
   // keep idx in sync with the URL
   useEffect(() => {
@@ -62,10 +67,7 @@ export default function WizardFlow() {
   // “Next” is enabled only if the current step is valid and we’re not already launching
   const canNext =
     idx === 0
-      ? (() => {
-          const data = infoRef.current?.getData();
-          return !!data?.niche && !!data?.productType && !!data?.targetPriceRange;
-        })()
+      ? !!infoData.niche && !!infoData.productType && !!infoData.targetPriceRange
       : idx === 1
         ? pricingRef.current?.isValid() ?? false
         : idx === 2
@@ -154,7 +156,7 @@ export default function WizardFlow() {
               {runningSimId ? (
                   <SimulationRunner simId={runningSimId} />
               ) : idx === 0 ? (
-                  <BusinessInfoStep ref={infoRef} />
+                  <BusinessInfoStep ref={infoRef} onChange={setInfoData} />
               ) : idx === 1 ? (
                   <AIPricingStep ref={pricingRef} />
               ) : idx === 2 ? (

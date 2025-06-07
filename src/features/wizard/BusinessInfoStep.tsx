@@ -25,7 +25,12 @@ const fade = {
   animate: { opacity: 1, x: 0 },
 };
 
-const BusinessInfoStep = forwardRef<BusinessInfoHandles>((_, ref) => {
+export interface BusinessInfoStepProps {
+  onChange?: (data: Basics) => void;
+}
+
+const BusinessInfoStep = forwardRef<BusinessInfoHandles, BusinessInfoStepProps>(
+  ({ onChange }, ref) => {
   const stored = useSelector((s: RootState) => s.wizard.basics);
 
   const [niche, setNiche] = useState("");
@@ -46,6 +51,11 @@ const BusinessInfoStep = forwardRef<BusinessInfoHandles>((_, ref) => {
       setTargetPriceRange(stored.targetPriceRange);
     }
   }, [stored]);
+
+  // notify parent on changes
+  useEffect(() => {
+    onChange?.({ niche, productType, targetPriceRange });
+  }, [niche, productType, targetPriceRange, onChange]);
 
   const validate = () => {
     const errs: Record<string, string> = {};
