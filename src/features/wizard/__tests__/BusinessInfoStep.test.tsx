@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { wizardSlice } from "../wizardSlice";
@@ -29,6 +29,16 @@ test("validate and get data", () => {
   });
   expect(ref.current?.isValid()).toBe(true);
   expect(ref.current?.getData().niche).toBe("ai");
+});
+
+test("shows errors when fields missing", () => {
+  const { ref } = renderWithStore();
+  let valid = true;
+  act(() => {
+    valid = ref.current?.isValid() ?? true;
+  });
+  expect(valid).toBe(false);
+  expect(screen.getAllByText(/required/i).length).toBeGreaterThan(0);
 });
 
 test("prefills form from state", () => {
