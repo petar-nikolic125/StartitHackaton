@@ -11,13 +11,7 @@ import type { RootState } from "../../store";
 import type { Basics } from "./types";
 import { FieldGroup } from "../../components/FieldGroup";
 import { Toast } from "../../components/ui/Toast";
-import { LoadingDots } from "../../components/LoadingDots";
 import { motion } from "framer-motion";
-
-export interface BusinessInfoStepProps {
-  onNext(payload: { basics: Basics }): void | Promise<void>;
-  onBack(): void;
-}
 
 export interface BusinessInfoHandles {
   /** Returns true only if all 3 fields are non‐empty */
@@ -31,10 +25,7 @@ const fade = {
   animate: { opacity: 1, x: 0 },
 };
 
-const BusinessInfoStep = forwardRef<
-    BusinessInfoHandles,
-    BusinessInfoStepProps
->(({ onNext, onBack }, ref) => {
+const BusinessInfoStep = forwardRef<BusinessInfoHandles>((_, ref) => {
   const stored = useSelector((s: RootState) => s.wizard.basics);
 
   const [niche, setNiche] = useState("");
@@ -42,7 +33,6 @@ const BusinessInfoStep = forwardRef<
   const [targetPriceRange, setTargetPriceRange] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [toast, setToast] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const nicheRef = useRef<HTMLInputElement>(null);
   const prodRef = useRef<HTMLSelectElement>(null);
@@ -98,18 +88,6 @@ const BusinessInfoStep = forwardRef<
     }),
     [validate, niche, productType, targetPriceRange]
   );
-  const handleClick = async () => {
-    const ok = ref
-      ? (ref as React.RefObject<BusinessInfoHandles>).current?.isValid() ?? false
-      : validate();
-    if (!ok) return;
-
-    setLoading(true);
-    await onNext({
-      basics: { niche, productType, targetPriceRange },
-    });
-    setLoading(false);
-  };
 
   return (
       <motion.div
@@ -184,29 +162,6 @@ const BusinessInfoStep = forwardRef<
         </FieldGroup>
 
         {toast && <Toast message={toast} onClose={() => setToast("")} />}
-
-        <div className="flex justify-between pt-4">
-          <button
-              className="text-sm text-gray-400 hover:underline"
-              onClick={onBack}
-              disabled={loading}
-          >
-            Back
-          </button>
-          <button
-              className="bg-primary px-4 py-2 rounded-md text-white disabled:opacity-50 flex items-center"
-              onClick={handleClick}
-              disabled={
-                loading ||
-                !!Object.keys(errors).length ||
-                !niche ||
-                !productType ||
-                !targetPriceRange
-              }
-          >
-            {loading ? <LoadingDots /> : "Next"}
-          </button>
-        </div>
       </motion.div>
   );
 });
