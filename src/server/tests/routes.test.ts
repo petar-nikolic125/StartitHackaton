@@ -22,3 +22,19 @@ test('POST /api/simulation/start', async () => {
   expect(res.status).toBe(200);
   expect(res.body.simId).toBeDefined();
 });
+
+test('POST /api/pricing', async () => {
+  mockedChat.mockResolvedValue('{"tiers":[{"label":"Basic","price":10}]}');
+  const res = await request(app).post('/api/pricing').send({ niche: 'x', productType: 'y', targetPriceRange: '$' });
+  expect(res.status).toBe(200);
+  expect(res.body.tiers[0].label).toBe('Basic');
+});
+
+test('POST /api/marketing', async () => {
+  mockedChat.mockResolvedValue('{"captions":["hi"],"hashtags":["#x"],"bestTimes":[]}');
+  const res = await request(app)
+    .post('/api/marketing')
+    .send({ basics: { niche: 'x', productType: 'y', targetPriceRange: '$' }, pricing: { tiers: [] } });
+  expect(res.status).toBe(200);
+  expect(res.body.captions[0]).toBe('hi');
+});
