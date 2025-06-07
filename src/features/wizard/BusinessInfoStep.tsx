@@ -5,6 +5,7 @@ import React, {
   useState,
   useEffect,
   useRef,
+  useCallback,
 } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store";
@@ -25,7 +26,12 @@ const fade = {
   animate: { opacity: 1, x: 0 },
 };
 
-const BusinessInfoStep = forwardRef<BusinessInfoHandles>((_, ref) => {
+export interface BusinessInfoStepProps {
+  onChange?: (data: Basics) => void;
+}
+
+const BusinessInfoStep = forwardRef<BusinessInfoHandles, BusinessInfoStepProps>(
+  ({ onChange }, ref) => {
   const stored = useSelector((s: RootState) => s.wizard.basics);
 
   const [niche, setNiche] = useState("");
@@ -47,7 +53,12 @@ const BusinessInfoStep = forwardRef<BusinessInfoHandles>((_, ref) => {
     }
   }, [stored]);
 
-  const validate = () => {
+  // notify parent on changes
+  useEffect(() => {
+    onChange?.({ niche, productType, targetPriceRange });
+  }, [niche, productType, targetPriceRange, onChange]);
+
+  const validate = useCallback(() => {
     const errs: Record<string, string> = {};
     if (!niche) errs.niche = "Required";
     if (!productType) errs.productType = "Required";
@@ -73,7 +84,7 @@ const BusinessInfoStep = forwardRef<BusinessInfoHandles>((_, ref) => {
     }
 
     return true;
-  };
+  }, [niche, productType, targetPriceRange]);
 
   // expose our two methods to the wizard container
   useImperativeHandle(

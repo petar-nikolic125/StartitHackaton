@@ -7,6 +7,7 @@ import {
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store";
 import { useGeneratePricingMutation } from "./aiAgent";
+import { tiers as fallbackTiers } from "../../data/tiers";
 import { LoadingDots } from "../../components/LoadingDots";
 import { Toast } from "../../components/ui/Toast";
 import { Button } from "../../components/ui/Button";
@@ -47,6 +48,18 @@ export const AIPricingStep = forwardRef<PricingHandles>((_, ref) => {
   useEffect(() => {
     if (error) setErrMsg('Failed to load pricing data.');
   }, [error]);
+
+  // fallback to local pricing tiers when API fails
+  useEffect(() => {
+    if (error && tiers.length === 0) {
+      setTiers(
+        fallbackTiers.map((t) => ({
+          label: t.name,
+          price: Number(String(t.price).replace(/[^0-9.]/g, "")),
+        }))
+      );
+    }
+  }, [error, tiers.length]);
 
   const validate = () => {
     const invalid = tiers.length === 0 || tiers.some((t) => !t.label || !t.price);
