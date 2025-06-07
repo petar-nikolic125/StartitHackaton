@@ -17,8 +17,6 @@ import {
   setPricing,
   reset,
 } from "./wizardSlice";
-import { useStartSimMutation } from "../simulator/simApi";
-import { setSession } from "../simulator/simSlice";
 import type { RootState } from "../../store";
 import { useNetworkStatus } from "../../hooks/useNetworkStatus";
 
@@ -39,12 +37,9 @@ export default function WizardFlow() {
   const { stepIndex } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { basics } = useSelector((s: RootState) => s.wizard);
+  useSelector((s: RootState) => s.wizard.basics); // trigger re-render when basics changes
 
   const [idx, setIdx] = useState(Number(stepIndex) || 0);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [startSim] = useStartSimMutation();
   const online = useNetworkStatus();
 
   useEffect(() => {
@@ -73,16 +68,7 @@ export default function WizardFlow() {
     else if (idx === 1) dispatch(setPricing(data as any));
     else if (idx === 2) dispatch(setMarketing(data as any));
     if (idx === steps.length - 1) {
-      try {
-        setLoading(true);
-        const res = await startSim({ basics: basics! }).unwrap();
-        dispatch(setSession({ simId: res.simId, weekPlan: res.weekPlan, forecast: res.forecast }));
-        navigate("/dashboard");
-      } catch (err) {
-        setError("Failed to start simulation. Please try again.");
-      } finally {
-        setLoading(false);
-      }
+      await reviewRef.current?.launch();
     } else {
       setIdx((i) => Math.min(i + 1, steps.length - 1));
     }
@@ -101,17 +87,6 @@ export default function WizardFlow() {
   return (
     <div className="min-h-screen flex items-center justify-center p-6 bg-dark1 relative">
       <TimerBar currentStep={idx + 1} total={steps.length} />
-      {loading && (
-        <div className="absolute inset-0 bg-black/70 flex items-center justify-center z-50 text-white text-lg">
-          Preparing your AI Business Simulation…
-        </div>
-      )}
-      {error && (
-        <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center z-50 text-white space-y-4">
-          <p>{error}</p>
-          <Button onClick={handleNext}>Retry</Button>
-        </div>
-      )}
       {!online && (
         <div className="absolute inset-0 bg-black/70 flex items-center justify-center z-40 text-white">
           Offline — reconnect to continue.
@@ -139,7 +114,7 @@ export default function WizardFlow() {
             {idx === 0 ? "Exit" : "Back"}
           </Button>
           <Button onClick={handleNext} disabled={!canNext || !online}>
-            {idx === steps.length - 1 ? "Start" : "Next"}
+            {idx === steps.length - 1 ? "Launch" : "Next"}
           </Button>
         </div>
       </div>
