@@ -58,18 +58,14 @@ export default function WizardFlow() {
   const marketingRef = useRef<MarketingHandles>(null);
   const reviewRef    = useRef<ReviewHandles>(null);
 
-  // Step 0: collect basics
-  const handleInfoNext = () => {
-    if (!infoRef.current?.isValid()) return;
-    const basics = infoRef.current.getData();
-    dispatch(setBasics(basics));
-    setIdx(1);
-  };
 
   // “Next” is enabled only if the current step is valid and we’re not already launching
   const canNext =
     idx === 0
-      ? infoRef.current?.isValid() ?? false
+      ? (() => {
+          const data = infoRef.current?.getData();
+          return !!data?.niche && !!data?.productType && !!data?.targetPriceRange;
+        })()
       : idx === 1
         ? pricingRef.current?.isValid() ?? false
         : idx === 2
@@ -79,6 +75,13 @@ export default function WizardFlow() {
   // generic Next handler for steps 1–3, and “Launch” on step 4
   const handleNext = async () => {
     if (!canNext) return;
+
+    if (idx === 0) {
+      if (!infoRef.current?.isValid()) return;
+      dispatch(setBasics(infoRef.current.getData()));
+      setIdx(1);
+      return;
+    }
 
     if (idx === 1) {
       dispatch(setPricing(pricingRef.current!.getData()));
@@ -151,11 +154,7 @@ export default function WizardFlow() {
               {runningSimId ? (
                   <SimulationRunner simId={runningSimId} />
               ) : idx === 0 ? (
-                  <BusinessInfoStep
-                      ref={infoRef}
-                      onNext={handleInfoNext}
-                      onBack={handleExit}
-                  />
+                  <BusinessInfoStep ref={infoRef} />
               ) : idx === 1 ? (
                   <AIPricingStep ref={pricingRef} />
               ) : idx === 2 ? (
