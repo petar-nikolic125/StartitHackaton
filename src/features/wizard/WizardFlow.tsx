@@ -59,10 +59,11 @@ export default function WizardFlow() {
   const Current = steps[idx];
   const currentRef = refs[idx];
 
-  const canNext = currentRef.current?.isValid?.() ?? false;
+  const canNext = (currentRef.current?.isValid?.() ?? false) &&
+    !reviewRef.current?.isLaunching?.();
 
   const handleNext = async () => {
-    if (!currentRef.current?.isValid()) return;
+    if (!currentRef.current?.isValid() || reviewRef.current?.isLaunching?.()) return;
     const data = currentRef.current.getData();
     if (idx === 0) dispatch(setBasics(data as any));
     else if (idx === 1) dispatch(setPricing(data as any));

@@ -22,6 +22,7 @@ export interface ReviewHandles {
     marketing: MarketingData | null;
   };
   launch: () => Promise<void>;
+  isLaunching: () => boolean;
 }
 
 export const ReviewPublishStep = forwardRef<ReviewHandles>((_, ref) => {
@@ -59,6 +60,7 @@ export const ReviewPublishStep = forwardRef<ReviewHandles>((_, ref) => {
     isValid: () => true,
     getData: () => data,
     launch,
+    isLaunching: () => loading,
   }));
 
   return (
