@@ -14,7 +14,7 @@ import {
 import { Button } from '../../components/ui/Button';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts';
 import type { RootState } from '../../store';
-import type { WeekPlan, Forecast, Metrics } from '../../types/business';
+import type { WeekPlan, Metrics } from '../../types/business';
 import { useNetworkStatus } from '../../hooks/useNetworkStatus';
 
 function computeMetrics(plan: WeekPlan | null): Metrics {

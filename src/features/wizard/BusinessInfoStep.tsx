@@ -57,53 +57,51 @@ const BusinessInfoStep = forwardRef<
     }
   }, [stored]);
 
+  const validate = () => {
+    const errs: Record<string, string> = {};
+    if (!niche) errs.niche = "Required";
+    if (!productType) errs.productType = "Required";
+    if (!targetPriceRange) errs.targetPriceRange = "Required";
+    setErrors(errs);
+
+    if (Object.keys(errs).length) {
+      setToast("Please complete all required fields");
+      const firstKey = Object.keys(errs)[0];
+
+      const map: Record<string, HTMLElement | null> = {
+        niche: nicheRef.current,
+        productType: prodRef.current,
+        targetPriceRange: priceRef.current,
+      };
+
+      const el = map[firstKey];
+      if (el && typeof (el as HTMLElement).scrollIntoView === "function") {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      return false;
+    }
+
+    return true;
+  };
+
   // expose our two methods to the wizard container
   useImperativeHandle(
-      ref,
-      () => ({
-        isValid: () => {
-          // collect any missing‐field errors
-          const errs: Record<string,string> = {};
-          if (!niche)           errs.niche            = "Required";
-          if (!productType)     errs.productType      = "Required";
-          if (!targetPriceRange)errs.targetPriceRange = "Required";
-          setErrors(errs);
-
-          if (Object.keys(errs).length) {
-            setToast("Please complete all required fields");
-            const firstKey = Object.keys(errs)[0];
-
-            // map field name → actual HTMLElement (or null)
-            const map: Record<string, HTMLElement | null> = {
-              niche:           nicheRef.current,
-              productType:     prodRef.current,
-              targetPriceRange: priceRef.current,
-            };
-
-            // scroll that element into view if it exists
-            const el = map[firstKey];
-            if (el) {
-              el.scrollIntoView({ behavior: "smooth", block: "center" });
-            }
-
-            return false;
-          }
-
-          return true;
-        },
-
-        getData: () => ({
-          niche,
-          productType,
-          targetPriceRange,
-        }),
+    ref,
+    () => ({
+      isValid: validate,
+      getData: () => ({
+        niche,
+        productType,
+        targetPriceRange,
       }),
-      [niche, productType, targetPriceRange]
+    }),
+    [validate, niche, productType, targetPriceRange]
   );
   const handleClick = async () => {
-    // call isValid via ref
-    const ok = (ref as React.RefObject<BusinessInfoHandles>).current
-        ?.isValid();
+    const ok = ref
+      ? (ref as React.RefObject<BusinessInfoHandles>).current?.isValid() ?? false
+      : validate();
     if (!ok) return;
 
     setLoading(true);
@@ -198,7 +196,13 @@ const BusinessInfoStep = forwardRef<
           <button
               className="bg-primary px-4 py-2 rounded-md text-white disabled:opacity-50 flex items-center"
               onClick={handleClick}
-              disabled={loading}
+              disabled={
+                loading ||
+                !!Object.keys(errors).length ||
+                !niche ||
+                !productType ||
+                !targetPriceRange
+              }
           >
             {loading ? <LoadingDots /> : "Next"}
           </button>
@@ -209,3 +213,4 @@ const BusinessInfoStep = forwardRef<
 
 BusinessInfoStep.displayName = "BusinessInfoStep";
 export default BusinessInfoStep;
+export { BusinessInfoStep };

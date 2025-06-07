@@ -30,12 +30,7 @@ const fadeSlide = {
   exit:    { opacity: 0, x: 20 },
 } as const;
 
-const steps = [
-  BusinessInfoStep,
-  AIPricingStep,
-  AIMarketingStep,
-  ReviewPublishStep,
-] as const;
+const totalSteps = 4;
 
 export default function WizardFlow() {
   const { stepIndex } = useParams();
@@ -62,13 +57,6 @@ export default function WizardFlow() {
   const pricingRef   = useRef<PricingHandles>(null);
   const marketingRef = useRef<MarketingHandles>(null);
   const reviewRef    = useRef<ReviewHandles>(null);
-  const refs = [infoRef, pricingRef, marketingRef, reviewRef] as const;
-
-  const currentRef  = refs[idx] as
-      | React.RefObject<BusinessInfoHandles>
-      | React.RefObject<PricingHandles>
-      | React.RefObject<MarketingHandles>
-      | React.RefObject<ReviewHandles>;
 
   // Step 0: collect basics
   const handleInfoNext = () => {
@@ -80,10 +68,13 @@ export default function WizardFlow() {
 
   // “Next” is enabled only if the current step is valid and we’re not already launching
   const canNext =
-      idx === 0
-          ? infoRef.current?.isValid() ?? false
-          : (currentRef.current?.isValid?.() ?? false) &&
-          !reviewRef.current?.isLaunching?.();
+    idx === 0
+      ? infoRef.current?.isValid() ?? false
+      : idx === 1
+        ? pricingRef.current?.isValid() ?? false
+        : idx === 2
+          ? marketingRef.current?.isValid() ?? false
+          : !reviewRef.current?.isLaunching?.();
 
   // generic Next handler for steps 1–3, and “Launch” on step 4
   const handleNext = async () => {
@@ -95,11 +86,11 @@ export default function WizardFlow() {
       dispatch(setMarketing(marketingRef.current!.getData()));
     }
 
-    if (idx === steps.length - 1) {
+    if (idx === 3) {
       const simId = await reviewRef.current!.launch();
       if (simId) setRunningSimId(simId);
     } else {
-      setIdx((i) => Math.min(i + 1, steps.length - 1));
+      setIdx((i) => i + 1);
     }
   };
 
@@ -119,7 +110,7 @@ export default function WizardFlow() {
 
   return (
       <div className="min-h-screen flex items-center justify-center p-6 bg-dark1 relative">
-        <TimerBar currentStep={idx + 1} total={steps.length} />
+        <TimerBar currentStep={idx + 1} total={totalSteps} />
 
         {!online && (
             <div className="absolute inset-0 bg-black/70 flex items-center justify-center z-40 text-white">
@@ -181,7 +172,7 @@ export default function WizardFlow() {
                   {idx === 0 ? "Exit" : "Back"}
                 </Button>
                 <Button onClick={handleNext} disabled={!canNext || !online}>
-                  {idx === steps.length - 1 ? "Launch" : "Next"}
+                  {idx === totalSteps - 1 ? "Launch" : "Next"}
                 </Button>
               </div>
           )}

@@ -30,13 +30,19 @@ export const AIPricingStep = forwardRef<PricingHandles>((_, ref) => {
   useWizardGuard(1);
 
   useEffect(() => {
-    if (pricing) setTiers(pricing.tiers);
-    else if (basics) generatePricing(basics);
-  }, [pricing, basics, generatePricing]);
+    if (pricing) {
+      setTiers(pricing.tiers);
+    } else if (basics) {
+      generatePricing(basics);
+    }
+  }, [basics, pricing, generatePricing]);
 
   useEffect(() => {
-    if (data) setTiers(data.tiers);
-  }, [data]);
+    if (data) {
+      setTiers(data.tiers);
+    }
+    if (data || error) console.log(data, error);
+  }, [data, error]);
 
   useEffect(() => {
     if (error) setErrMsg('Failed to load pricing data.');
