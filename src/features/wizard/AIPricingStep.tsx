@@ -1,54 +1,58 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setPricing } from "./wizardSlice";
-import { useGeneratePricingMutation } from "./aiAgent";
-import { Button } from "../../components/ui/Button";
-import { LoadingDots } from "../../components/LoadingDots";
-import { motion } from "framer-motion";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
+import { useSelector } from "react-redux";
 import type { RootState } from "../../store";
+import { useGeneratePricingMutation } from "./aiAgent";
+import { LoadingDots } from "../../components/LoadingDots";
+import { Toast } from "../../components/ui/Toast";
+import { motion } from "framer-motion";
 import { useWizardGuard } from "./useWizardGuard";
+import type { PricingData } from "./types";
 
-interface Props {
-  onNext: () => void;
-  onBack: () => void;
+export interface PricingHandles {
+  isValid: () => boolean;
+  getData: () => PricingData;
 }
 
-export function AIPricingStep({ onNext, onBack }: Props) {
-  const dispatch = useDispatch();
+export const AIPricingStep = forwardRef<PricingHandles>((_, ref) => {
   const basics = useSelector((s: RootState) => s.wizard.basics);
   const pricing = useSelector((s: RootState) => s.wizard.pricing);
   const [generatePricing, { data, isLoading }] = useGeneratePricingMutation();
-  const [tiers, setTiers] = useState<Array<{ label: string; price: number }>>(
-    [],
-  );
+  const [tiers, setTiers] = useState<Array<{ label: string; price: number }>>([]);
+  const [toast, setToast] = useState("");
   useWizardGuard(1);
 
   useEffect(() => {
-    if (pricing) {
-      setTiers(pricing.tiers);
-    } else if (basics) {
-      generatePricing(basics);
-    }
+    if (pricing) setTiers(pricing.tiers);
+    else if (basics) generatePricing(basics);
   }, [pricing, basics, generatePricing]);
 
   useEffect(() => {
-    if (data) {
-      setTiers(data.tiers);
-    }
+    if (data) setTiers(data.tiers);
   }, [data]);
 
-  const handleNext = () => {
-    dispatch(setPricing({ tiers }));
-    onNext();
+  const validate = () => {
+    const invalid = tiers.length === 0 || tiers.some((t) => !t.label || !t.price);
+    if (invalid) {
+      setToast("Please review your pricing tiers.");
+      return false;
+    }
+    return true;
   };
+
+  useImperativeHandle(ref, () => ({
+    isValid: validate,
+    getData: () => ({ tiers }),
+  }));
 
   return (
     <motion.div
       className="space-y-4"
-      variants={{
-        initial: { opacity: 0, x: -20 },
-        animate: { opacity: 1, x: 0 },
-      }}
+      variants={{ initial: { opacity: 0, x: -20 }, animate: { opacity: 1, x: 0 } }}
       initial="initial"
       animate="animate"
     >
@@ -60,10 +64,7 @@ export function AIPricingStep({ onNext, onBack }: Props) {
       {tiers.length > 0 && (
         <ul className="space-y-2">
           {tiers.map((t, idx) => (
-            <li
-              key={t.label}
-              className="bg-dark2 rounded-md p-2 flex space-x-2"
-            >
+            <li key={idx} className="bg-dark2 rounded-md p-2 flex space-x-2">
               <input
                 className="bg-transparent flex-1"
                 value={t.label}
@@ -87,14 +88,9 @@ export function AIPricingStep({ onNext, onBack }: Props) {
           ))}
         </ul>
       )}
-      <div className="flex justify-between pt-4">
-        <Button onClick={onBack} variant="solid">
-          Back
-        </Button>
-        <Button onClick={handleNext} disabled={isLoading || !tiers.length}>
-          Next
-        </Button>
-      </div>
+      {toast && <Toast message={toast} onClose={() => setToast("")} />}
     </motion.div>
   );
-}
+});
+
+AIPricingStep.displayName = "AIPricingStep";

@@ -1,22 +1,23 @@
+import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { wizardSlice } from "../wizardSlice";
-import { BusinessInfoStep } from "../BusinessInfoStep";
+import { BusinessInfoStep, type BusinessInfoHandles } from "../BusinessInfoStep";
 
 function renderWithStore() {
   const store = configureStore({ reducer: { wizard: wizardSlice.reducer } });
-  const onNext = jest.fn();
+  const ref = React.createRef<BusinessInfoHandles>();
   render(
     <Provider store={store}>
-      <BusinessInfoStep onNext={onNext} />
+      <BusinessInfoStep ref={ref} />
     </Provider>,
   );
-  return { store, onNext };
+  return { store, ref };
 }
 
-test("dispatches basics on next", () => {
-  const { store, onNext } = renderWithStore();
+test("validate and get data", () => {
+  const { store, ref } = renderWithStore();
   fireEvent.change(screen.getByLabelText(/your niche/i), {
     target: { value: "ai" },
   });
@@ -26,14 +27,13 @@ test("dispatches basics on next", () => {
   fireEvent.change(screen.getByLabelText(/target price range/i), {
     target: { value: "$0-49" },
   });
-  fireEvent.click(screen.getByRole("button", { name: /next/i }));
-  const state = store.getState().wizard;
-  expect(state.basics?.niche).toBe("ai");
-  expect(onNext).toHaveBeenCalled();
+  expect(ref.current?.isValid()).toBe(true);
+  expect(ref.current?.getData().niche).toBe("ai");
 });
 
 test("prefills form from state", () => {
   const store = configureStore({ reducer: { wizard: wizardSlice.reducer } });
+  const ref = React.createRef<BusinessInfoHandles>();
   store.dispatch(
     wizardSlice.actions.setBasics({
       niche: "fitness",
@@ -43,7 +43,7 @@ test("prefills form from state", () => {
   );
   render(
     <Provider store={store}>
-      <BusinessInfoStep onNext={jest.fn()} />
+      <BusinessInfoStep ref={ref} />
     </Provider>,
   );
   expect(screen.getByLabelText(/your niche/i)).toHaveValue("fitness");
