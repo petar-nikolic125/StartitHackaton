@@ -29,16 +29,26 @@ export class AISession {
 
   addUser(content: string) {
     this.messages.push({ role: "user", content });
+    this.messages = this.messages.slice(-10);
   }
 
   addAssistant(content: string) {
     this.messages.push({ role: "assistant", content });
+    this.messages = this.messages.slice(-10);
+  }
+
+  private parse<T>(content: string): T {
+    try {
+      return JSON.parse(content) as T;
+    } catch (err) {
+      throw new Error(`Failed to parse AI response: ${String(err)}`);
+    }
   }
 
   async start(): Promise<{ pricing: PricingTier[]; weekPlan: WeekPlan; forecast: Forecast }> {
     const content = await chat(this.messages);
     this.addAssistant(content);
-    const parsed = JSON.parse(content);
+    const parsed = this.parse<{ pricing: PricingTier[]; weekPlan: WeekPlan; forecast: Forecast }>(content);
     this.pricing = parsed.pricing;
     return parsed;
   }
@@ -48,7 +58,7 @@ export class AISession {
     this.addUser("continue");
     const content = await chat(this.messages);
     this.addAssistant(content);
-    return JSON.parse(content);
+    return this.parse<{ updatedPlan: WeekPlan; forecast: Forecast; advice: string }>(content);
   }
 
   async end(): Promise<{ summary: string }> {
