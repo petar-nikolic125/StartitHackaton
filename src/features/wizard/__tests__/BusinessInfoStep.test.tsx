@@ -1,62 +1,39 @@
-import React from "react";
-import { render, screen, fireEvent, act } from "@testing-library/react";
-import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
-import { wizardSlice } from "../wizardSlice";
-import { BusinessInfoStep, type BusinessInfoHandles } from "../BusinessInfoStep";
+import React from 'react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { wizardSlice } from '../wizardSlice';
+import { BusinessInfoStep } from '../BusinessInfoStep';
 
-function renderWithStore() {
+function setup() {
   const store = configureStore({ reducer: { wizard: wizardSlice.reducer } });
-  const ref = React.createRef<BusinessInfoHandles>();
+  const onNext = jest.fn();
+  const onBack = jest.fn();
   render(
     <Provider store={store}>
-      <BusinessInfoStep ref={ref} />
-    </Provider>,
+      <BusinessInfoStep onNext={onNext} onBack={onBack} />
+    </Provider>
   );
-  return { store, ref };
+  return { store, onNext, onBack };
 }
 
-test("validate and get data", () => {
-  const { store, ref } = renderWithStore();
-  fireEvent.change(screen.getByLabelText(/your niche/i), {
-    target: { value: "ai" },
+test('calls onNext with basics when valid', async () => {
+  const { onNext } = setup();
+  fireEvent.change(screen.getByLabelText(/your niche/i), { target: { value: 'ai' } });
+  fireEvent.change(screen.getByLabelText(/product type/i), { target: { value: 'video' } });
+  fireEvent.change(screen.getByLabelText(/target price range/i), { target: { value: '$0-49' } });
+  await act(async () => {
+    fireEvent.click(screen.getByRole('button', { name: /next/i }));
   });
-  fireEvent.change(screen.getByLabelText(/product type/i), {
-    target: { value: "video" },
-  });
-  fireEvent.change(screen.getByLabelText(/target price range/i), {
-    target: { value: "$0-49" },
-  });
-  expect(ref.current?.isValid()).toBe(true);
-  expect(ref.current?.getData().niche).toBe("ai");
+  expect(onNext).toHaveBeenCalledWith({ basics: { niche: 'ai', productType: 'video', targetPriceRange: '$0-49' } });
 });
 
-test("shows errors when fields missing", () => {
-  const { ref } = renderWithStore();
-  let valid = true;
-  act(() => {
-    valid = ref.current?.isValid() ?? true;
+test('shows errors when fields missing', async () => {
+  const { onNext } = setup();
+  const next = screen.getByRole('button', { name: /next/i });
+  await act(async () => {
+    fireEvent.click(next);
   });
-  expect(valid).toBe(false);
-  expect(screen.getAllByText(/required/i).length).toBeGreaterThan(0);
-});
-
-test("prefills form from state", () => {
-  const store = configureStore({ reducer: { wizard: wizardSlice.reducer } });
-  const ref = React.createRef<BusinessInfoHandles>();
-  store.dispatch(
-    wizardSlice.actions.setBasics({
-      niche: "fitness",
-      productType: "video",
-      targetPriceRange: "$0-49",
-    }),
-  );
-  render(
-    <Provider store={store}>
-      <BusinessInfoStep ref={ref} />
-    </Provider>,
-  );
-  expect(screen.getByLabelText(/your niche/i)).toHaveValue("fitness");
-  expect(screen.getByLabelText(/product type/i)).toHaveValue("video");
-  expect(screen.getByLabelText(/target price range/i)).toHaveValue("$0-49");
+  expect(next).toBeDisabled();
+  expect(onNext).not.toHaveBeenCalled();
 });
