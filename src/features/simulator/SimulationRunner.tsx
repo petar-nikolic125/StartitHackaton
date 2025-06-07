@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   useNextSimStepMutation,
   useEndSimMutation,
@@ -14,39 +14,45 @@ import {
 import { Button } from '../../components/ui/Button';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts';
 import type { RootState } from '../../store';
+import type { WeekPlan, Forecast, Metrics } from '../../types/business';
 import { useNetworkStatus } from '../../hooks/useNetworkStatus';
 
-export function SimulationRunner() {
+function computeMetrics(plan: WeekPlan | null): Metrics {
+  return { sales: plan?.tasks.length ?? 0, traffic: 0, cvr: 0 };
+}
+
+export interface SimulationRunnerProps {
+  simId: string;
+}
+
+export function SimulationRunner({ simId }: SimulationRunnerProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const params = useParams();
-  const { simId, weekPlan, forecast, advice, status } = useSelector(
+  const { weekPlan, forecast, adviceHistory, status, currentWeek } = useSelector(
     (s: RootState) => s.simulation,
   );
   const [nextStep] = useNextSimStepMutation();
   const [endSim] = useEndSimMutation();
   const [polling, setPolling] = useState(status === 'running');
+  const [isAdvancing, setIsAdvancing] = useState(false);
+  const [error, setError] = useState('');
+  const [summary, setSummary] = useState<string | null>(null);
   const online = useNetworkStatus();
 
   // Rehydrate session from localStorage if missing
   useEffect(() => {
-    if (!simId) {
+    if (!weekPlan) {
       const stored = localStorage.getItem('currentSim');
       if (stored) {
         try {
           const data = JSON.parse(stored);
           dispatch(setSession(data));
-          return;
         } catch {
           /* ignore */
         }
       }
     }
-    if (!simId && params.simId) {
-      // If we can't restore, send back to wizard
-      navigate('/wizard/0');
-    }
-  }, [simId, dispatch, params.simId, navigate]);
+  }, [weekPlan, dispatch]);
 
   // Initial fetch on mount
   useEffect(() => {
@@ -55,7 +61,7 @@ export function SimulationRunner() {
       try {
         const res = await nextStep({
           simId,
-          metrics: { sales: 0, traffic: 0, cvr: 0 },
+          metrics: computeMetrics(weekPlan),
         }).unwrap();
         dispatch(
           addAdvice({
@@ -76,7 +82,7 @@ export function SimulationRunner() {
       try {
         const res = await nextStep({
           simId,
-          metrics: { sales: 0, traffic: 0, cvr: 0 },
+          metrics: computeMetrics(weekPlan),
         }).unwrap();
         dispatch(
           addAdvice({
@@ -99,33 +105,50 @@ export function SimulationRunner() {
 
   const nextWeek = async () => {
     if (!simId) return;
+    setIsAdvancing(true);
+    setError('');
     try {
       const res = await nextStep({
         simId,
-        metrics: { sales: 0, traffic: 0, cvr: 0 },
+        metrics: computeMetrics(weekPlan),
       }).unwrap();
       dispatch(
         addAdvice({ weekPlan: res.updatedPlan, forecast: res.forecast, advice: res.advice }),
       );
     } catch {
-      /* noop */
+      setError('Failed to advance simulation');
+    } finally {
+      setIsAdvancing(false);
     }
   };
 
   const stop = async () => {
     if (!simId) return;
     try {
-      await endSim({ simId }).unwrap();
+      const res = await endSim({ simId }).unwrap();
+      setSummary(res.summary);
     } catch {
       /* ignore */
     }
     dispatch(clearSession());
     localStorage.removeItem('currentSim');
-    navigate('/wizard/0');
+    navigate('/dashboard');
   };
 
   if (!simId) {
     return <div className="p-8">No active simulation</div>;
+  }
+
+  if (summary) {
+    return (
+      <div className="p-4 space-y-4 text-center">
+        <h2 className="text-xl font-bold">Simulation Complete</h2>
+        <p>{summary}</p>
+        <Button onClick={() => navigate('/dashboard')} variant="solid">
+          Go to Dashboard
+        </Button>
+      </div>
+    );
   }
 
   return (
@@ -134,11 +157,20 @@ export function SimulationRunner() {
         <div className="text-red-500">Offline — reconnect to continue.</div>
       )}
       {weekPlan && (
-        <ul className="list-disc pl-5" aria-label="Weekly Plan">
-          {weekPlan.tasks.map((t, i) => (
-            <li key={i}>{t}</li>
-          ))}
-        </ul>
+        <table className="w-full text-left text-sm" aria-label="Week Plan">
+          <thead>
+            <tr>
+              <th>Week {currentWeek}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {weekPlan.tasks.map((t, i) => (
+              <tr key={i}>
+                <td>{t}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
       {forecast && (
         <LineChart width={320} height={200} data={forecast.months} className="mx-auto">
@@ -148,14 +180,15 @@ export function SimulationRunner() {
           <Line type="monotone" dataKey="revenue" stroke="#8884d8" />
         </LineChart>
       )}
-      {advice.map((a, i) => (
+      {error && <p className="text-red-500">{error}</p>}
+      {adviceHistory.map((a, i) => (
         <p key={i} className="bg-dark2 p-2 rounded" aria-label={`Advice ${i + 1}`}>{a}</p>
       ))}
       <div className="space-x-2">
         <Button aria-label="Pause Simulation" onClick={pause} disabled={!online}>
           {polling ? 'Pause' : 'Resume'}
         </Button>
-        <Button aria-label="Next Week" onClick={nextWeek} disabled={!online || !polling}>
+        <Button aria-label="Next Week" onClick={nextWeek} disabled={!online || !polling || isAdvancing}>
           Next Week
         </Button>
         <Button aria-label="Stop Simulation" onClick={stop} variant="solid">

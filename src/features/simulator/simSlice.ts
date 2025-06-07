@@ -3,17 +3,19 @@ import type { WeekPlan, Forecast } from '../../types/business';
 
 interface SimState {
   simId: string | null;
+  currentWeek: number;
   weekPlan: WeekPlan | null;
   forecast: Forecast | null;
-  advice: string[];
+  adviceHistory: string[];
   status: 'idle' | 'running' | 'paused';
 }
 
 const initialState: SimState = {
   simId: null,
+  currentWeek: 0,
   weekPlan: null,
   forecast: null,
-  advice: [],
+  adviceHistory: [],
   status: 'idle',
 };
 
@@ -21,16 +23,24 @@ export const simSlice = createSlice({
   name: 'simulation',
   initialState,
   reducers: {
-    setSession(state, action: PayloadAction<{ simId: string; weekPlan: WeekPlan; forecast: Forecast }>) {
+    setSession(
+      state,
+      action: PayloadAction<{ simId: string; weekPlan: WeekPlan; forecast: Forecast }>,
+    ) {
       state.simId = action.payload.simId;
+      state.currentWeek = 1;
       state.weekPlan = action.payload.weekPlan;
       state.forecast = action.payload.forecast;
       state.status = 'running';
     },
-    addAdvice(state, action: PayloadAction<{ weekPlan: WeekPlan; forecast: Forecast; advice: string }>) {
+    addAdvice(
+      state,
+      action: PayloadAction<{ weekPlan: WeekPlan; forecast: Forecast; advice: string }>,
+    ) {
+      state.currentWeek += 1;
       state.weekPlan = action.payload.weekPlan;
       state.forecast = action.payload.forecast;
-      state.advice.push(action.payload.advice);
+      state.adviceHistory.push(action.payload.advice);
     },
     setStatus(state, action: PayloadAction<SimState['status']>) {
       state.status = action.payload;
@@ -42,4 +52,9 @@ export const simSlice = createSlice({
 });
 
 export const { setSession, addAdvice, setStatus, clearSession } = simSlice.actions;
+
+// Selectors
+export const selectCurrentSession = (state: { simulation: SimState }) => state.simulation;
+export const selectSimulationWeek = (state: { simulation: SimState }) => state.simulation.currentWeek;
+
 export default simSlice.reducer;

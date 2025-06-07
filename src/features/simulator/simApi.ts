@@ -15,7 +15,16 @@ export const simApi = createApi({
     startSim: builder.mutation<StartResponse, { basics: Basics }>({
       query: (body) => ({ url: 'simulation/start', method: 'POST', body }),
     }),
-    nextSimStep: builder.mutation<{ updatedPlan: WeekPlan; forecast: Forecast; advice: string }, { simId: string; metrics: Metrics }>({
+    getSimStatus: builder.query<
+      { weekPlan: WeekPlan; forecast: Forecast; currentWeek: number; isComplete: boolean },
+      { simId: string }
+    >({
+      query: ({ simId }) => ({ url: `simulation/status/${simId}` }),
+    }),
+    nextSimStep: builder.mutation<
+      { updatedPlan: WeekPlan; forecast: Forecast; advice: string },
+      { simId: string; metrics: Metrics }
+    >({
       query: (body) => ({ url: 'simulation/next-step', method: 'POST', body }),
     }),
     endSim: builder.mutation<{ summary: string }, { simId: string }>({
@@ -24,4 +33,9 @@ export const simApi = createApi({
   }),
 });
 
-export const { useStartSimMutation, useNextSimStepMutation, useEndSimMutation } = simApi;
+export const {
+  useStartSimMutation,
+  useGetSimStatusQuery,
+  useNextSimStepMutation,
+  useEndSimMutation,
+} = simApi;
