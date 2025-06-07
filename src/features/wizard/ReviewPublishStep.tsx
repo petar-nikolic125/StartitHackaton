@@ -25,8 +25,8 @@ export interface ReviewHandles {
     marketing: MarketingData | null;
   };
 
-  /** Fire the simulation API */
-  launch: () => Promise<void>;
+  /** Fire the simulation API and return the simId */
+  launch: () => Promise<string | undefined>;
 
   /** Expose the current “launch in progress” state */
   isLaunching: () => boolean;
