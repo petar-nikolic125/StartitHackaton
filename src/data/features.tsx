@@ -17,32 +17,32 @@ export interface Feature {
 export const features: Feature[] = [
   {
     icon: <RocketLaunchIcon className="w-8 h-8 text-primary" />,
-    title: 'Fast Setup',
-    text: 'Setup in minutes.',
+    title: 'AI Quickstart',
+    text: 'Launch in minutes with automated setup.',
   },
   {
     icon: <BanknotesIcon className="w-8 h-8 text-primary" />,
-    title: 'Payments',
-    text: 'Stripe & Apple Pay out-of-box.',
+    title: 'Instant Payments',
+    text: 'AI auto-connects Stripe & Apple Pay.',
   },
   {
     icon: <ChartBarIcon className="w-8 h-8 text-primary" />,
-    title: 'Analytics',
-    text: 'Know what converts.',
+    title: 'AI Insights & Forecasts',
+    text: 'Smart predictions on what sells.',
   },
   {
     icon: <LinkIcon className="w-8 h-8 text-primary" />,
-    title: 'gram.link',
-    text: 'Shareable vanity URL.',
+    title: 'Smart Link',
+    text: 'Smart Product Link for your AI-driven business.',
   },
   {
     icon: <SwatchIcon className="w-8 h-8 text-primary" />,
-    title: 'Customization',
-    text: 'Match your brand.',
+    title: 'AI Branding',
+    text: 'Match your style instantly.',
   },
   {
     icon: <LifebuoyIcon className="w-8 h-8 text-primary" />,
-    title: 'Support',
-    text: '24 / 7 creator chat.',
+    title: '24/7 Founder Support',
+    text: 'AI + human chat around the clock.',
   },
 ];

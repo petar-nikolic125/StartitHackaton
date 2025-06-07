@@ -21,7 +21,7 @@ export function LiveCounter({ className = '' }: { className?: string }) {
         ${className}
       `}
       >
-      ${formatted} earned by creators
+      ${formatted} earned by founders
     </span>
   )
 }

@@ -46,7 +46,7 @@ export default function Pricing() {
           text-center mb-12 z-10
         "
             >
-                Pricing &amp; Plans
+                Plans for AI-Powered Growth
             </h2>
 
             {/* Toggle Buttons */}
@@ -102,7 +102,7 @@ export default function Pricing() {
         "
                 onClick={() => document.getElementById('wizard')?.classList.remove('hidden')}
             >
-                Pick Pro Now
+                Pick AI Pro Now
             </Button>
 
             {/* Pricing Cards Grid */}

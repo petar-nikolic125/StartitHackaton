@@ -43,7 +43,7 @@ export default function WizardDrawer() {
             drop-shadow-2xl                             /* NEW: neon glow under heading */
           "
                 >
-                    Start in 4 Minutes
+                Launch with AI in 4 Minutes
                 </h2>
 
                 <p
@@ -53,7 +53,7 @@ export default function WizardDrawer() {
             hover:text-white transition-colors duration-300 /* NEW: text brightens on hover */
           "
                 >
-                    Pick a template to begin.
+                    Let AI set up your launch.
                 </p>
 
                 <Button

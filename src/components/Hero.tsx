@@ -5,13 +5,13 @@ import { Button } from "./ui/Button";
 import { LiveCounter } from "./LiveCounter";
 
 export default function Hero() {
-  const [ticker, setTicker] = useState("@coachmike just earned $3,482");
+  const [ticker, setTicker] = useState("AI Coach just helped launch a $3.5k campaign");
   const navigate = useNavigate();
   useEffect(() => {
     const data = [
-      "@coachmike just earned $3,482",
-      "@creatorsara just earned $1,208",
-      "@buildtim just earned $542",
+      "AI Coach just helped launch a $3.5k campaign",
+      "AI Coach just unlocked $1.2k in sales",
+      "AI Coach just optimized a $500 drop",
     ];
     let i = 0;
     const id = setInterval(() => {
@@ -90,7 +90,7 @@ export default function Hero() {
             leading-[1.1]
           "
         >
-          Launch your course store in{" "}
+          Launch your business with AI in{" "}
           <span
             className="
               pulsing-underline                   /* pulsing neon underline */
@@ -128,7 +128,7 @@ export default function Hero() {
               hover:underline
             "
           >
-            gram.link/yourname
+            smart.link/yourname
           </span>{" "}
           today.
         </p>
@@ -136,7 +136,7 @@ export default function Hero() {
         <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
           <Button
             size="lg"
-            aria-label="Start your free GramCourses store now in under 4 minutes"
+            aria-label="Launch your AI-driven business now in under 4 minutes"
             onClick={() => navigate("/wizard/0")}
             className="
               bg-gradient-to-r from-insta-pink via-insta-purple to-insta-blue
@@ -149,7 +149,7 @@ export default function Hero() {
               focus:outline-none focus:ring-6 focus:ring-insta-yellow/50
             "
           >
-            Start Free Store
+            Launch with AI Now
           </Button>
 
           <button
