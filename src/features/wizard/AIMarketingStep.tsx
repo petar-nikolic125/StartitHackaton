@@ -1,30 +1,33 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setMarketing } from "./wizardSlice";
-import { useGenerateMarketingMutation } from "./aiAgent";
-import { Button } from "../../components/ui/Button";
-import { LoadingDots } from "../../components/LoadingDots";
-import { motion } from "framer-motion";
-import { BarChart, Bar, XAxis, YAxis } from "recharts";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
+import { useSelector } from "react-redux";
 import type { RootState } from "../../store";
+import { useGenerateMarketingMutation } from "./aiAgent";
+import { LoadingDots } from "../../components/LoadingDots";
+import { Toast } from "../../components/ui/Toast";
+import { BarChart, Bar, XAxis, YAxis } from "recharts";
+import { motion } from "framer-motion";
 import { useWizardGuard } from "./useWizardGuard";
+import type { MarketingData } from "./types";
 
-interface Props {
-  onNext: () => void;
-  onBack: () => void;
+export interface MarketingHandles {
+  isValid: () => boolean;
+  getData: () => MarketingData;
 }
 
-export function AIMarketingStep({ onNext, onBack }: Props) {
-  const dispatch = useDispatch();
+export const AIMarketingStep = forwardRef<MarketingHandles>((_, ref) => {
   const basics = useSelector((s: RootState) => s.wizard.basics);
   const pricing = useSelector((s: RootState) => s.wizard.pricing);
   const marketing = useSelector((s: RootState) => s.wizard.marketing);
   const [generate, { data, isLoading }] = useGenerateMarketingMutation();
   const [captions, setCaptions] = useState<string[]>([]);
   const [hashtags, setHashtags] = useState<string[]>([]);
-  const [times, setTimes] = useState<Array<{ time: string; count: number }>>(
-    [],
-  );
+  const [times, setTimes] = useState<Array<{ time: string; count: number }>>([]);
+  const [toast, setToast] = useState("");
   useWizardGuard(2);
 
   useEffect(() => {
@@ -41,24 +44,28 @@ export function AIMarketingStep({ onNext, onBack }: Props) {
     if (data) {
       setCaptions(data.captions);
       setHashtags(data.hashtags);
-      setTimes(
-        data.bestTimes?.map((t) => ({ time: t.time, count: t.count })) || [],
-      );
+      setTimes(data.bestTimes?.map((t) => ({ time: t.time, count: t.count })) || []);
     }
   }, [data]);
 
-  const handleNext = () => {
-    dispatch(setMarketing({ captions, hashtags, bestTimes: times }));
-    onNext();
+  const validate = () => {
+    const invalid = captions.length === 0 || hashtags.length === 0;
+    if (invalid) {
+      setToast("Marketing tips are incomplete.");
+      return false;
+    }
+    return true;
   };
+
+  useImperativeHandle(ref, () => ({
+    isValid: validate,
+    getData: () => ({ captions, hashtags, bestTimes: times }),
+  }));
 
   return (
     <motion.div
       className="space-y-4"
-      variants={{
-        initial: { opacity: 0, x: -20 },
-        animate: { opacity: 1, x: 0 },
-      }}
+      variants={{ initial: { opacity: 0, x: -20 }, animate: { opacity: 1, x: 0 } }}
       initial="initial"
       animate="animate"
     >
@@ -95,14 +102,9 @@ export function AIMarketingStep({ onNext, onBack }: Props) {
           )}
         </div>
       )}
-      <div className="flex justify-between pt-4">
-        <Button onClick={onBack} variant="solid">
-          Back
-        </Button>
-        <Button onClick={handleNext} disabled={!captions.length}>
-          Next
-        </Button>
-      </div>
+      {toast && <Toast message={toast} onClose={() => setToast("")} />}
     </motion.div>
   );
-}
+});
+
+AIMarketingStep.displayName = "AIMarketingStep";
