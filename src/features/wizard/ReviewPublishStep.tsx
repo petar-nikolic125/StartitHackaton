@@ -1,23 +1,66 @@
 import {
   forwardRef,
   useImperativeHandle,
-} from "react";
-import { useSelector } from "react-redux";
-import type { RootState } from "../../store";
-import { motion } from "framer-motion";
-import type { Basics, PricingData, MarketingData } from "./types";
+  useState,
+} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { LoadingDots } from '../../components/LoadingDots';
+import { Toast } from '../../components/ui/Toast';
+import { Button } from '../../components/ui/Button';
+import { useStartSimMutation } from '../simulator/simApi';
+import { setSession } from '../simulator/simSlice';
+import type { RootState } from '../../store';
+import type { Basics, PricingData, MarketingData } from './types';
 
 export interface ReviewHandles {
   isValid: () => boolean;
-  getData: () => { basics: Basics | null; pricing: PricingData | null; marketing: MarketingData | null };
+  getData: () => {
+    basics: Basics | null;
+    pricing: PricingData | null;
+    marketing: MarketingData | null;
+  };
+  launch: () => Promise<void>;
+  isLaunching: () => boolean;
 }
 
 export const ReviewPublishStep = forwardRef<ReviewHandles>((_, ref) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const data = useSelector((s: RootState) => s.wizard);
+  const [startSim] = useStartSimMutation();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const launch = async () => {
+    if (!data.basics) return;
+    try {
+      setError('');
+      setLoading(true);
+      const res = await startSim({ basics: data.basics }).unwrap();
+      dispatch(setSession({
+        simId: res.simId,
+        weekPlan: res.weekPlan,
+        forecast: res.forecast,
+      }));
+      localStorage.setItem(
+        'currentSim',
+        JSON.stringify({ simId: res.simId, weekPlan: res.weekPlan, forecast: res.forecast }),
+      );
+      navigate(`/simulation/${res.simId}`);
+    } catch {
+      setError('Failed to start simulation.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useImperativeHandle(ref, () => ({
     isValid: () => true,
     getData: () => data,
+    launch,
+    isLaunching: () => loading,
   }));
 
   return (
@@ -30,6 +73,18 @@ export const ReviewPublishStep = forwardRef<ReviewHandles>((_, ref) => {
       <pre className="bg-dark2 p-4 rounded-md text-sm whitespace-pre-wrap">
         {JSON.stringify(data, null, 2)}
       </pre>
+      {loading && (
+        <div className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center space-y-4 z-50 text-white">
+          <LoadingDots />
+          <p>Launching your AI Simulation…</p>
+        </div>
+      )}
+      {error && (
+        <div className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center space-y-4 z-50 text-white">
+          <Toast message={error} onClose={() => setError('')} />
+          <Button onClick={launch}>Retry</Button>
+        </div>
+      )}
     </motion.div>
   );
 });

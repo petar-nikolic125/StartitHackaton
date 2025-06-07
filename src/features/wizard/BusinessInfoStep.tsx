@@ -1,29 +1,25 @@
-import {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
-import { useSelector } from "react-redux";
-import type { RootState } from "../../store";
+import { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import type { RootState } from '../../store';
 import { FieldGroup } from "../../components/FieldGroup";
 import { Toast } from "../../components/ui/Toast";
+import { LoadingDots } from '../../components/LoadingDots';
 import { motion } from "framer-motion";
-import type { Basics } from "./types";
+import type { Basics } from './types';
 
-export interface BusinessInfoHandles {
-  isValid: () => boolean;
-  getData: () => Basics;
+export interface BusinessInfoStepProps {
+  onNext(payload: { basics: Basics }): void | Promise<void>;
+  onBack(): void;
 }
 
-export const BusinessInfoStep = forwardRef<BusinessInfoHandles>((_, ref) => {
+export function BusinessInfoStep({ onNext, onBack }: BusinessInfoStepProps) {
   const basics = useSelector((s: RootState) => s.wizard.basics);
   const [niche, setNiche] = useState("");
   const [productType, setProductType] = useState("");
   const [targetPriceRange, setTargetPriceRange] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [toast, setToast] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const nicheRef = useRef<HTMLInputElement>(null);
   const productRef = useRef<HTMLSelectElement>(null);
@@ -37,7 +33,7 @@ export const BusinessInfoStep = forwardRef<BusinessInfoHandles>((_, ref) => {
     }
   }, [basics]);
 
-  const validate = () => {
+  const validate = (): boolean => {
     const errs: Record<string, string> = {};
     if (!niche) errs.niche = "Required";
     if (!productType) errs.productType = "Required";
@@ -59,10 +55,14 @@ export const BusinessInfoStep = forwardRef<BusinessInfoHandles>((_, ref) => {
     return true;
   };
 
-  useImperativeHandle(ref, () => ({
-    isValid: validate,
-    getData: () => ({ niche, productType, targetPriceRange }),
-  }));
+  const handleSubmit = async () => {
+    if (!validate()) return;
+    setLoading(true);
+    await Promise.resolve(
+      onNext({ basics: { niche, productType, targetPriceRange } }),
+    );
+    setLoading(false);
+  };
 
   return (
     <motion.div
@@ -123,8 +123,26 @@ export const BusinessInfoStep = forwardRef<BusinessInfoHandles>((_, ref) => {
         )}
       </FieldGroup>
       {toast && <Toast message={toast} onClose={() => setToast("")} />}
+      <div className="flex justify-between pt-4">
+        <button
+          type="button"
+          className="text-sm text-gray-400 hover:underline"
+          onClick={onBack}
+          disabled={loading}
+        >
+          Back
+        </button>
+        <button
+          type="button"
+          onClick={handleSubmit}
+          disabled={loading || !!Object.keys(errors).length || !niche || !productType || !targetPriceRange}
+          className="bg-primary px-4 py-2 rounded-md text-white disabled:opacity-50 flex items-center justify-center"
+        >
+          {loading ? <LoadingDots /> : 'Next'}
+        </button>
+      </div>
     </motion.div>
   );
-});
+}
 
-BusinessInfoStep.displayName = "BusinessInfoStep";
+BusinessInfoStep.displayName = 'BusinessInfoStep';
