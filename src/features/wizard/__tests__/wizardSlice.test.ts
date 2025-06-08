@@ -3,6 +3,7 @@ import {
   setBasics,
   setPricing,
   setMarketing,
+  setPrompt,
   reset,
 } from "../wizardSlice";
 
@@ -35,6 +36,11 @@ describe("wizardSlice", () => {
       setMarketing({ captions: ["hi"], hashtags: ["#x"] }),
     );
     expect(state.marketing?.captions[0]).toBe("hi");
+  });
+
+  it("sets prompt", () => {
+    const state = reducer(undefined, setPrompt({ prompt: "hello" }));
+    expect(state.prompt?.prompt).toBe("hello");
   });
 
   it("resets state", () => {

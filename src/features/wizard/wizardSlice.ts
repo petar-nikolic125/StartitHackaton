@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { Basics, PricingData, MarketingData } from "./types";
+import type { Basics, PricingData, MarketingData, PromptData } from "./types";
 
 export interface WizardState {
   basics: Basics | null;
   pricing: PricingData | null;
   marketing: MarketingData | null;
+  prompt: PromptData | null;
   status: "idle" | "loading" | "published";
 }
 
@@ -12,6 +13,7 @@ const initialState: WizardState = {
   basics: null,
   pricing: null,
   marketing: null,
+  prompt: null,
   status: "idle",
 };
 
@@ -32,6 +34,9 @@ export const wizardSlice = createSlice({
     setMarketing(state, action: PayloadAction<MarketingData>) {
       state.marketing = action.payload;
     },
+    setPrompt(state, action: PayloadAction<PromptData>) {
+      state.prompt = action.payload;
+    },
     setStatus(state, action: PayloadAction<WizardState["status"]>) {
       state.status = action.payload;
     },
@@ -42,8 +47,14 @@ export const wizardSlice = createSlice({
 });
 
 // Named export of actions for use in both tests and components:
-export const { setBasics, setPricing, setMarketing, setStatus, reset } =
-    wizardSlice.actions;
+export const {
+  setBasics,
+  setPricing,
+  setMarketing,
+  setPrompt,
+  setStatus,
+  reset,
+} = wizardSlice.actions;
 
 // ─── Default‐export the reducer ─────────────────────────────────────────────────
 // This line makes it possible to do:
