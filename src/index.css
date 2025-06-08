@@ -1,0 +1,664 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*========================================================
+  Global Color & Font Variables
+  (These match your tailwind.config.js, plus Instagram additions)
+========================================================*/
+:root {
+  --color-dark1: #0F0D1A;
+  --color-dark2: #1A1A2E;
+  --color-primary: #FF3CAC;
+  --color-secondary: #784BA0;
+  --color-accent: #2B86C5;
+  --color-dark-overlay: rgba(0, 0, 0, 0.5);
+
+  /* Instagram‐inspired palette */
+  --color-insta-yellow: #FEDA77;
+  --color-insta-orange: #FA7E1E;
+  --color-insta-pink: #D62976;
+  --color-insta-purple: #962FBF;
+  --color-insta-blue: #4F5BD5;
+}
+
+/*========================================================
+  Body & Typography
+========================================================*/
+body {
+  @apply bg-dark2 text-gray-100 antialiased;
+
+  /* subtle background noise */
+  background-image: radial-gradient(
+          at 50% 50%,
+          rgba(0, 0, 0, 0.05) 1px,
+          transparent 0
+  );
+  background-size: 4px 4px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.snap-container {
+  /* Removed scroll-snap to allow free scrolling */
+  scroll-padding-top: 5rem;
+  overscroll-behavior-y: none;
+}
+
+/*========================================================
+  Navbar & Navigation Links
+========================================================*/
+.navbar {
+  @apply fixed top-0 left-0 w-full z-30 bg-dark1/70 backdrop-blur-md;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.navbar .logo {
+  @apply font-extrabold text-2xl text-white relative;
+}
+.navbar .logo::after {
+  content: '';
+  @apply absolute inset-0 rounded;
+  /* Neon‐glow: combine primary + Instagram spectrum */
+  box-shadow:
+          0 0 12px var(--color-primary),
+          0 0 20px var(--color-insta-pink),
+          0 0 30px var(--color-insta-purple),
+          0 0 40px var(--color-insta-blue);
+  opacity: 0.6;
+  animation: glowPulse 3s infinite ease-in-out;
+}
+
+.nav-link {
+  @apply px-4 py-2 relative text-gray-200 font-medium transition-all duration-150 ease-out;
+
+  /* Underline gradient now sweeps through Insta‐spectrum */
+  background-image: linear-gradient(
+          90deg,
+          var(--color-insta-yellow),
+          var(--color-insta-orange),
+          var(--color-insta-pink),
+          var(--color-insta-purple),
+          var(--color-insta-blue)
+  );
+  background-size: 0 2px;
+  background-repeat: no-repeat;
+  background-position: bottom left;
+}
+
+.nav-link:hover,
+.nav-link:focus {
+  @apply text-white;
+  background-size: 100% 2px;
+}
+
+.nav-link.active {
+  @apply text-white;
+  background-size: 100% 2px;
+}
+
+/* Hamburger Menu (mobile) */
+.menu-button {
+  @apply md:hidden p-2 text-gray-200 hover:text-white relative;
+}
+.menu-button::before,
+.menu-button::after,
+.menu-button div {
+  @apply block w-6 h-0.5 bg-gray-200 my-1 transition-transform duration-300 ease-in-out;
+}
+.menu-button.open::before {
+  transform: translateY(6px) rotate(45deg);
+}
+.menu-button.open div {
+  @apply opacity-0;
+}
+.menu-button.open::after {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* Bottom Tab Bar (mobile) */
+.mobile-tabbar {
+  @apply fixed bottom-0 left-0 w-full bg-dark1/80 py-2 flex justify-around items-center backdrop-blur-md;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.7);
+}
+.mobile-tabbar .tab-link {
+  @apply text-gray-200 hover:text-white text-sm font-semibold px-2;
+  position: relative;
+}
+.mobile-tabbar .tab-link::after {
+  content: '';
+  @apply absolute bottom-0 left-1/2 w-0 h-1 rounded-full transition-all duration-300;
+  background: linear-gradient(
+          to right,
+          var(--color-insta-pink),
+          var(--color-insta-purple),
+          var(--color-insta-blue)
+  );
+}
+.mobile-tabbar .tab-link.active::after {
+  @apply w-6;
+  left: calc(50% - 1.5rem);
+}
+
+/*========================================================
+  Hero Section
+========================================================*/
+.hero-section {
+  @apply pt-24 md:pt-32 bg-gradient-to-br from-dark1 via-dark2 to-dark1 relative overflow-hidden;
+}
+
+/* Pulsing Gradient Text (for “4 minutes”) */
+.pulsing-text {
+  font-weight: 800;
+  background: linear-gradient(
+          45deg,
+          var(--color-insta-yellow),
+          var(--color-insta-orange),
+          var(--color-insta-pink),
+          var(--color-insta-purple),
+          var(--color-insta-blue),
+          var(--color-primary)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-size: 400% 400%;
+  animation: textGradientShift 5s infinite ease-in-out;
+}
+
+/* “Pulsing‐Underline” Utility (alternative naming) */
+.pulsing-underline {
+  @apply inline-block relative font-extrabold;
+}
+.pulsing-underline::after {
+  content: '';
+  @apply absolute left-0 bottom-0 w-full h-1 rounded-full;
+  background: linear-gradient(
+          to right,
+          var(--color-insta-pink),
+          var(--color-insta-purple),
+          var(--color-insta-blue)
+  );
+  opacity: 0.7;
+  animation: underlinePulse 2s infinite ease-in-out;
+}
+
+/* Underline Link in Hero (e.g., “smart.link/yourname”) */
+.hero-link {
+  @apply text-primary font-medium relative inline-block;
+  background-image: linear-gradient(
+          to right,
+          var(--color-insta-orange),
+          var(--color-insta-pink),
+          var(--color-insta-purple)
+  );
+  background-size: 0 2px;
+  background-repeat: no-repeat;
+  background-position: bottom left;
+  transition: background-size 0.4s ease, color 0.3s ease;
+}
+.hero-link:hover {
+  @apply text-white;
+  background-size: 100% 2px;
+}
+
+/* Accent Button with Instagram‐style Glow & Gradient */
+.btn-primary {
+  @apply relative inline-flex items-center justify-center px-6 py-3 font-semibold rounded-full text-white overflow-hidden;
+  background: linear-gradient(
+          90deg,
+          var(--color-insta-pink),
+          var(--color-insta-purple),
+          var(--color-insta-blue)
+  );
+  background-size: 200% 200%;
+  transition: background-position 0.5s ease, box-shadow 0.3s ease;
+}
+.btn-primary:hover {
+  background-position: 100% 0;
+  box-shadow:
+          0 0 20px var(--color-insta-pink),
+          0 0 40px var(--color-insta-purple),
+          0 0 60px var(--color-insta-blue);
+}
+.btn-primary::after {
+  content: '';
+  @apply absolute inset-0 rounded-full opacity-0;
+  box-shadow: 0 0 30px var(--color-insta-orange);
+  transition: opacity 0.3s ease;
+}
+.btn-primary:hover::after {
+  @apply opacity-60;
+}
+
+/*========================================================
+  Hero Animations & Keyframes
+========================================================*/
+@keyframes textGradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes underlinePulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scaleX(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(1.2);
+  }
+}
+
+/*========================================================
+  Phone Mockup & Inner Buttons
+========================================================*/
+/* The outer phone container */
+.phone-mockup {
+  @apply hidden md:block relative w-80 h-[420px] mx-auto;
+  background: #111; /* placeholder; actual border styling done in JSX */
+  border-radius: 2rem;
+  box-shadow:
+          0 0 60px rgba(255, 60, 172, 0.4),
+          0 0 90px rgba(43, 134, 197, 0.3);
+  overflow: hidden;
+  transform: scale(0.95);
+  animation: phoneScale 6s infinite ease-in-out;
+}
+.phone-mockup::before {
+  content: '';
+  @apply absolute inset-0 rounded-2xl opacity-0;
+  background: radial-gradient(
+          circle at center,
+          rgba(255, 60, 172, 0.3),
+          transparent 60%
+  );
+  animation: phoneGlow 4s infinite ease-in-out;
+}
+
+/* The animated gradient “screen” */
+.hero-gradient {
+  background: linear-gradient(
+          45deg,
+          var(--color-insta-yellow),
+          var(--color-insta-orange),
+          var(--color-insta-pink),
+          var(--color-insta-purple),
+          var(--color-insta-blue)
+  );
+  background-size: 400% 400%;
+  animation: heroSpectrum 6s infinite ease-in-out;
+}
+@keyframes heroSpectrum {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes phoneScale {
+  0%, 100% {
+    transform: scale(0.95);
+  }
+  50% {
+    transform: scale(1);
+  }
+}
+@keyframes phoneGlow {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/*========================================================
+  Live Counter Chip
+========================================================*/
+.live-counter {
+  @apply inline-flex items-center space-x-2 bg-white/10 text-lg font-semibold px-5 py-2 rounded-full shadow-lg;
+  /* Removed backdrop‐blur to keep things crisp */
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+.live-counter:hover {
+  @apply bg-white/20 transform scale-105;
+}
+
+/*========================================================
+  Progress Bar (Top)
+========================================================*/
+.progress-bar-container {
+  @apply fixed top-0 left-0 w-full h-1 z-50;
+  background: var(--color-dark1);
+}
+.progress-bar-fill {
+  @apply h-full bg-gradient-to-r from-insta-pink via-insta-purple to-insta-blue;
+  width: 0%;
+  transition: width 1s ease-out;
+}
+
+/*========================================================
+  Feature Cards (on /features page)
+  NOTE: Do NOT @apply “group” here; add “group” class in your JSX.
+========================================================*/
+.features-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12;
+}
+
+.feature-card {
+  @apply relative bg-dark1 p-6 rounded-2xl shadow-xl overflow-hidden transition-transform duration-300 ease-out;
+  border: 2px solid transparent;
+  /* On hover, use an Instagram‐spectrum border and subtle glow */
+}
+.feature-card:hover {
+  @apply transform -translate-y-2;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(
+          120deg,
+          var(--color-insta-pink),
+          var(--color-insta-purple),
+          var(--color-insta-blue)
+  );
+  box-shadow: 0 0 20px rgba(214, 41, 118, 0.5), 0 0 30px rgba(150, 47, 191, 0.4);
+}
+.feature-card::before {
+  content: '';
+  @apply absolute inset-0 rounded-2xl opacity-0;
+  background-image: linear-gradient(
+          120deg,
+          var(--color-insta-yellow),
+          var(--color-insta-orange),
+          var(--color-insta-pink),
+          var(--color-insta-purple),
+          var(--color-insta-blue)
+  );
+  background-size: 200% 200%;
+  animation: cardGradient 8s infinite ease;
+}
+.feature-card:hover::before {
+  @apply opacity-20;
+}
+
+.feature-card .icon-container {
+  @apply mb-4 inline-flex items-center justify-center w-12 h-12 rounded-full bg-dark2 transition-all duration-300 ease-out;
+  box-shadow: 0 0 10px rgba(254, 218, 119, 0.2);
+}
+.feature-card .icon-container svg {
+  @apply w-6 h-6 text-insta-pink transition-transform duration-300 ease-out;
+}
+.feature-card:hover .icon-container {
+  @apply bg-gradient-to-br from-insta-pink to-insta-purple;
+}
+.feature-card:hover .icon-container svg {
+  @apply text-white transform scale-110;
+}
+
+.feature-card .feature-title {
+  @apply text-xl font-semibold text-transparent bg-clip-text mb-2;
+  background: linear-gradient(
+          90deg,
+          var(--color-insta-orange),
+          var(--color-insta-pink),
+          var(--color-insta-purple)
+  );
+  animation: textGradientShift 5s infinite ease-in-out;
+}
+.feature-card .feature-text {
+  @apply text-gray-300;
+}
+
+/*========================================================
+  Pricing Cards (on /pricing page)
+========================================================*/
+.pricing-grid {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-8 mt-12;
+}
+
+.pricing-card {
+  @apply relative bg-dark1 p-8 rounded-3xl shadow-2xl transition-transform duration-300 ease-out transform;
+  border: 3px solid transparent;
+}
+.pricing-card.popular {
+  border-image-slice: 1;
+  border-image-source: linear-gradient(
+          to right,
+          var(--color-insta-orange) 20%,
+          var(--color-insta-pink) 40%,
+          var(--color-insta-purple) 60%,
+          var(--color-insta-blue) 80%
+  );
+  box-shadow:
+          0 0 20px rgba(214, 41, 118, 0.5),
+          0 0 30px rgba(150, 47, 191, 0.3);
+}
+.pricing-card:hover {
+  @apply -translate-y-3;
+}
+
+.pricing-card .card-header {
+  @apply mb-6 text-center;
+}
+.pricing-card .plan-tier {
+  @apply text-xl font-medium text-insta-blue uppercase mb-2;
+}
+.pricing-card .plan-price {
+  @apply text-4xl font-extrabold text-transparent mb-4 bg-clip-text;
+  background: linear-gradient(
+          to right,
+          var(--color-insta-pink),
+          var(--color-insta-purple),
+          var(--color-insta-blue)
+  );
+}
+.pricing-card .features-list {
+  @apply mb-6 space-y-2;
+}
+.pricing-card .feature-item {
+  @apply flex items-center space-x-2 text-gray-300;
+}
+.pricing-card .feature-item svg {
+  @apply w-5 h-5 text-insta-pink;
+}
+.pricing-card .select-btn {
+  @apply w-full inline-block py-3 rounded-full font-semibold text-white text-center transition-shadow duration-300;
+  background: linear-gradient(
+          to right,
+          var(--color-insta-purple),
+          var(--color-insta-blue),
+          var(--color-insta-pink)
+  );
+}
+.pricing-card .select-btn:hover {
+  box-shadow:
+          0 0 20px rgba(214, 41, 118, 0.5),
+          0 0 30px rgba(150, 47, 191, 0.3);
+}
+
+/* “Most Popular” Badge */
+.popular-badge {
+  @apply absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-4 py-1 rounded-full text-sm font-semibold text-white shadow-lg;
+  background: linear-gradient(
+          to right,
+          var(--color-insta-orange),
+          var(--color-insta-pink),
+          var(--color-insta-purple)
+  );
+  animation: badgePulse 2.5s infinite ease-in-out;
+}
+@keyframes badgePulse {
+  0%, 100% {
+    transform: scale(1) translate(-50%, -50%);
+  }
+  50% {
+    transform: scale(1.1) translate(-50%, -50%);
+  }
+}
+
+/*========================================================
+  Creator Cards (on /creators page)
+========================================================*/
+.creators-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12;
+}
+
+.creator-card {
+  @apply relative bg-dark1 p-6 rounded-2xl shadow-lg transition-transform duration-300 ease-out overflow-hidden;
+  border: 2px solid transparent;
+}
+.creator-card:hover {
+  @apply -translate-y-1;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(
+          120deg,
+          var(--color-insta-pink),
+          var(--color-insta-purple),
+          var(--color-insta-blue)
+  );
+  box-shadow:
+          0 0 20px rgba(214, 41, 118, 0.5),
+          0 0 30px rgba(150, 47, 191, 0.3);
+}
+
+.creator-card .avatar-container {
+  @apply relative mx-auto w-20 h-20 mb-4 rounded-full bg-dark2 flex items-center justify-center overflow-hidden;
+}
+.creator-card .avatar-container img,
+.creator-card .avatar-container svg {
+  @apply w-full h-full object-cover;
+}
+.creator-card .avatar-container::after {
+  content: '';
+  @apply absolute inset-0 rounded-full opacity-0;
+  background: radial-gradient(
+          circle at center,
+          var(--color-insta-purple),
+          transparent 70%
+  );
+  animation: avatarGlow 4s infinite ease-in-out;
+}
+.creator-card:hover .avatar-container::after {
+  @apply opacity-60;
+}
+@keyframes avatarGlow {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.creator-card .creator-name {
+  @apply text-xl font-semibold text-insta-blue text-center mb-1;
+}
+.creator-card .creator-handle {
+  @apply text-gray-400 text-center mb-2;
+}
+.creator-card .creator-quote {
+  @apply italic text-gray-300 text-center mb-4;
+}
+.creator-card .badge {
+  @apply absolute top-2 right-2 px-3 py-1 rounded-full text-xs font-semibold text-white shadow;
+  background: linear-gradient(
+          to right,
+          var(--color-insta-yellow),
+          var(--color-insta-orange)
+  );
+  animation: badgeShake 2s infinite ease-in-out;
+}
+@keyframes badgeShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(2px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+}
+
+/*========================================================
+  Section Divider & Utility Classes
+========================================================*/
+.section-divider {
+  @apply relative my-16 h-0.5 bg-gray-700;
+}
+.section-divider::before {
+  content: '';
+  @apply absolute left-1/2 top-0 w-12 h-0.5 rounded;
+  background: linear-gradient(
+          to right,
+          var(--color-insta-pink),
+          var(--color-insta-purple),
+          var(--color-insta-blue)
+  );
+  animation: dividerSwing 4s infinite ease-in-out;
+}
+@keyframes dividerSwing {
+  0%, 100% {
+    transform: translateX(-50%) scaleX(1);
+  }
+  50% {
+    transform: translateX(-50%) scaleX(1.3);
+  }
+}
+
+/* Glowing Background Utility */
+.glow-bg {
+    @apply relative overflow-hidden;
+}
+.glow-bg::before {
+    content: '';
+    @apply absolute inset-0 rounded-lg opacity-0;
+    background: radial-gradient(
+            circle at center,
+            var(--color-insta-pink)/30,
+            transparent 70%
+    );
+    animation: bgGlowPulse 4s infinite ease-in-out;
+    pointer-events: none;  /* ← allow clicks/typing through */
+}
+@keyframes bgGlowPulse {
+    0%, 100% { opacity: 0; }
+    50%      { opacity: 0.4; }
+}
+
+
+/*========================================================
+  Ease‐of‐Use Utility & Overrides
+========================================================*/
+.overflow-hidden-scrollbar::-webkit-scrollbar {
+  width: 0px; /* Hide scrollbar for WebKit browsers */
+}
+.overflow-hidden-scrollbar {
+  -ms-overflow-style: none;  /* IE 10+ */
+  scrollbar-width: none;     /* Firefox */
+}
+
+/*========================================================
+  GLOBAL ANIMATIONS
+========================================================*/
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
