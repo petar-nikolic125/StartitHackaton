@@ -50,3 +50,8 @@ export interface MarketingData {
   hashtags: string[];
   bestTimes?: Array<{ time: string; count: number }>;
 }
+
+/** User provided custom prompt */
+export interface PromptData {
+  prompt: string;
+}
