@@ -29,6 +29,11 @@ describe('AI wizard simulation', () => {
     cy.get('ul li').should('have.length', 1);
     cy.contains('Next').click();
 
+    // Idea step
+    cy.contains('Describe your business idea in detail');
+    cy.get('textarea').type('My awesome idea.');
+    cy.contains('Next').click();
+
     // Marketing step should show captions/hashtags
     cy.contains('Captions');
     cy.contains('Hashtags');

@@ -10,6 +10,7 @@ import BusinessInfoStep, {
   type BusinessInfoHandles,
 } from "./BusinessInfoStep";
 import { AIPricingStep, type PricingHandles } from "./AIPricingStep";
+import IdeaStep, { type IdeaHandles } from "./IdeaStep";
 import { AIMarketingStep, type MarketingHandles } from "./AIMarketingStep";
 import { ReviewPublishStep, type ReviewHandles } from "./ReviewPublishStep";
 import SimulationRunner from "../simulator/SimulationRunner";
@@ -30,13 +31,13 @@ const fadeSlide = {
   exit:    { opacity: 0, x: 20 },
 } as const;
 
-const totalSteps = 4;
+const totalSteps = 5;
 
 export default function WizardFlow() {
   const { stepIndex } = useParams();
   const navigate     = useNavigate();
   const dispatch     = useDispatch();
-  useSelector((s: RootState) => s.wizard.basics); // re-render on basics change
+  const basics       = useSelector((s: RootState) => s.wizard.basics);
 
   const [idx, setIdx]                   = useState(Number(stepIndex) || 0);
   const [runningSimId, setRunningSimId] = useState<string | null>(null);
@@ -60,6 +61,7 @@ export default function WizardFlow() {
   // refs for each wizard step
   const infoRef      = useRef<BusinessInfoHandles>(null);
   const pricingRef   = useRef<PricingHandles>(null);
+  const ideaRef      = useRef<IdeaHandles>(null);
   const marketingRef = useRef<MarketingHandles>(null);
   const reviewRef    = useRef<ReviewHandles>(null);
 
@@ -71,8 +73,10 @@ export default function WizardFlow() {
       : idx === 1
         ? pricingRef.current?.isValid() ?? false
         : idx === 2
-          ? marketingRef.current?.isValid() ?? false
-          : !reviewRef.current?.isLaunching?.();
+          ? ideaRef.current?.isValid() ?? false
+          : idx === 3
+            ? marketingRef.current?.isValid() ?? false
+            : !reviewRef.current?.isLaunching?.();
 
   // generic Next handler for steps 1–3, and “Launch” on step 4
   const handleNext = async () => {
@@ -88,10 +92,12 @@ export default function WizardFlow() {
     if (idx === 1) {
       dispatch(setPricing(pricingRef.current!.getData()));
     } else if (idx === 2) {
+      dispatch(setBasics({ ...(basics ?? {}), ...ideaRef.current!.getData() } as Basics));
+    } else if (idx === 3) {
       dispatch(setMarketing(marketingRef.current!.getData()));
     }
 
-    if (idx === 3) {
+    if (idx === 4) {
       const simId = await reviewRef.current!.launch();
       if (simId) setRunningSimId(simId);
     } else {
@@ -160,6 +166,8 @@ export default function WizardFlow() {
               ) : idx === 1 ? (
                   <AIPricingStep ref={pricingRef} />
               ) : idx === 2 ? (
+                  <IdeaStep ref={ideaRef} />
+              ) : idx === 3 ? (
                   <AIMarketingStep ref={marketingRef} />
               ) : (
                   <ReviewPublishStep ref={reviewRef} />
